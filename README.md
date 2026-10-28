@@ -10,7 +10,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`botdraw`**。它会拉起 `paper-figure-quality-merge`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、精致分层 UI、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 直接画图或宣称 PASS。
+先加载 **`botdraw`**。它会拉起 `paper-figure-quality-merge` 与 `paper-figure-gold-bar-calibration`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 或 gold-bar 校准直接画图或宣称 PASS。
 
 `internaldraw` 与 `internaldraw-2` 是历史别名，职责与 **botdraw** 相同；新对话请用 **botdraw**。
 
@@ -20,23 +20,25 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 | 文件夹 | 一句话职责 |
 | --- | --- |
-| `botdraw` | 主入口。先加载本技能，再拉 quality-merge、t48u OCR 门禁、t49u 同类型/叠图门禁与其余门禁。 |
-| `internaldraw` | 历史别名，指向 `botdraw`。新对话请用 botdraw。 |
-| `internaldraw-2` | 历史别名，指向 `botdraw`（与 `internaldraw` 同一套门禁）。 |
-| `paper-figure-quality-merge` | 总闸。锁定金线栈（含 t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。 |
-| `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准。 |
+| `botdraw` | 主入口。先加载本技能，再拉 quality-merge、gold-bar 校准、t48u OCR 门禁、t49u 同类型/叠图门禁与其余门禁。 |
+| `internaldraw` | 历史别名，指向 `botdraw`（含 gold-bar）。新对话请用 botdraw。 |
+| `internaldraw-2` | 历史别名，指向 `botdraw`（与 `internaldraw` 同一套门禁，含 gold-bar）。 |
+| `getting-started` | 新 bot 首次对话：问清语言、Drive、期刊与风格参考。 |
+| `paper-figure-quality-merge` | 总闸。锁定金线栈（含 gold_bars、t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。散文「精致」不可单独 PASS。 |
+| `paper-figure-gold-bar-calibration` | 跨 bot 精致度主标准：`gold_bars/` 裁切 + checklist。禁散文单独 PASS。 |
+| `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准；UI 对照 gold_bars。 |
 | `paper-figure-full-omml` | 全真可编辑 OMML，且 Fallback 预览要像 ORIG 的 LaTeX。 |
 | `paper-figure-arrow-proportion` | 有向边必须是杆 + 可见小尾巴；禁裸三角与巨头。 |
-| `paper-figure-scene-ui` | 每图强制精致分层 UI（脑、齿轮、图标一层层贴）。 |
-| `paper-figure-layout-gates` | 坐标刻度、Abl 引导线、图表层级、Fig08 机制阶梯线。 |
+| `paper-figure-scene-ui` | 每图强制精致分层 UI。大脑强制层；icon SBS vs gold_bar；`scene_ui.json` 必含 gold_bar 字段。 |
+| `paper-figure-layout-gates` | 坐标刻度、Abl 引导线、图表层级、Fig08 机制阶梯线、`axis_arrows_outward_pass`。 |
 | `paper-figure-layout-gates-2` | 文字入框、左右不镜像、Key 网格 IoU。YAML `name` 与上一文件夹冲突，按路径加载。 |
 | `paper-figure-text-layout-clearance` | 整块文本框、边距，以及文字与线/箭头/图标的间隙；t48u OCR 叠字与 t49u 叠图硬门禁。 |
 | `paper-figure-type-calibration` | 按 ORIG 测高再落字；禁止整页统一放大当唯一修复；t48u OCR 字号与 t49u 同类型字号锁定。 |
 | `paper-figure-hierarchical-measure` | 大面板 → 小模块 → 整块文本；同一 `(panel, role)` 共用字号；ORIG 像素 1:1 映到 PPT。 |
 | `paper-figure-dense-region-pipeline` | 密图分区冻结：切片、zoom-trace、逐区画完再冻结。 |
 | `paper-figure-layout-distribution` | 同类型字号锁定、叠图与 ORIG 间距；t49u `layout_type_shape_gate`。 |
-| `paper-figure-indistinguishable-gate` | 交付前对照 ORIG 自检（OCR `font_pass` ∧ `overlap_pass`，以及 t49u `type_uniform_pass` ∧ `shape_overlap_pass` ∧ `text_shape_clear_pass`）；任一硬缺陷即 FAIL。 |
-| `paper-figure-feedback-to-skill` | 失败裁剪归档、映到门禁、改技能，再重画。 |
+| `paper-figure-indistinguishable-gate` | 交付前对照 ORIG 自检（OCR 与 t49u 布局门禁，外加 gold_bar 字段与轴朝外）；缺 artifact 或任一硬缺陷即 FAIL。 |
+| `paper-figure-feedback-to-skill` | 失败裁剪归档、映到门禁、必要时新增 gold_bar archetype、改技能，再重画。 |
 | `paper-figure-a-ppt` | A 版合同：每张图一个纯矢量可编辑 PPTX。 |
 | `a-ppt` | A 版执行：真 OMML、箭头小尾巴、分层 UI、重叠门禁、只缩不放。 |
 | `paper-figure-b-blender` | A 通过之后的 B 版：Cycles 载具/三维插图，标注仍可编辑。 |
@@ -45,7 +47,17 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
 | `advsci-endnote-polish` | Advanced Science 文献核实、排版、润色与 EndNote（稿件技能，不是插图绘制）。 |
 
-共 24 个技能文件夹，每个里面一份 `SKILL.md`。
+共 26 个技能文件夹，每个里面一份 `SKILL.md`。
+
+## t53u/t54u 金标（gold bar）
+
+- 新增仓库根 `gold_bars/` 与技能 `paper-figure-gold-bar-calibration`。
+- 散文「精致/ORIG级」不可单独 PASS。
+- scene-ui：大脑强制层；icon SBS vs gold_bar；`scene_ui.json` 必含 gold_bar 字段。
+- layout-gates：`axis_arrows_outward_pass`。
+- 跨 bot 最小包：`botdraw` + `tools/` + `gold_bars/` + [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)。
+
+`gold_bars/` 与 `skills/` 并列。每个 archetype 有 `orig.png`、`pass_example.png`、`checklist.md`。当前四类：`brain_layered`、`gear_layered`、`axis_arrows_outward`、`type_title_body_caption`。说明见 [docs/GOLD_BAR_CALIBRATION.md](docs/GOLD_BAR_CALIBRATION.md)。
 
 ## 硬门禁（ConsensusRetNet 金线）
 
@@ -62,6 +74,8 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 9. **密图分区冻结。** 高密度图先切片和 zoom-trace，一个区域做完分层 UI、OMML、箭头并 SBS 通过后再冻结；兄弟面板对齐最好的那一块，不得逐图降级。
 10. **OCR 字号 + 叠字（t48u）。** 宣称 PASS / 冻结前跑 `tools/ocr_font_overlap_gate.py`。`qa/<fig>_ocr_font_overlap.json` 必须 `font_pass` 且 `overlap_pass`。只靠 office check-overlap 不算过。
 11. **同类型字号 + 叠图（t49u）。** 同一轮再跑 `tools/layout_type_shape_gate.py`。`qa/<fig>_layout_type_shape.json` 必须 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass`。只过 t48u OCR、同一 role 字号不齐、或卡片/图标仍叠，都不算过。
+12. **Gold-bar 精致度（t53u/t54u）。** 散文「精致/ORIG级」不可单独 PASS。对照 `gold_bars/<archetype>/` 裁切与 checklist；icon SBS vs gold_bar。`qa/<fig>_scene_ui.json` 必含 `gold_bar_ref`、`layer_count`、`sulci_strokes`、`icon_sbs`、`pass`。
+13. **轴箭头朝外。** 有坐标轴则 `axis_arrows_outward_pass`：Y 顶朝上、X 右朝右；优先 poly tip；禁止 flip 把箭头画朝里。
 
 ## 工具
 

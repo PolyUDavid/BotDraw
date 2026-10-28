@@ -11,7 +11,7 @@ mkdir -p "$BOT_WORKFLOWS_ROOT"
 cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 ```
 
-装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词。主入口会拉起 `paper-figure-quality-merge` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
 
 本地 Cursor 的粘贴提示词在 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)：对话里 `@botdraw`。
 
@@ -37,11 +37,12 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 通过条件：`qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真。字段见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。两道门禁都要过；只跑其中一道不算 PASS。
 
-## 要拷贝的技能文件夹（24）
+## 要拷贝的技能文件夹（26）
 
 - `a-ppt`
 - `advsci-endnote-polish`
 - `botdraw`
+- `getting-started`
 - `internaldraw`
 - `internaldraw-2`
 - `paper-figure-a-ppt`
@@ -51,6 +52,7 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 - `paper-figure-feedback-to-skill`
 - `paper-figure-fig01-gold-bar`
 - `paper-figure-full-omml`
+- `paper-figure-gold-bar-calibration`
 - `paper-figure-hierarchical-measure`
 - `paper-figure-indistinguishable-gate`
 - `paper-figure-layout-distribution`
@@ -72,7 +74,13 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 | 文件夹 | 内容 |
 | --- | --- |
-| `paper-figure-layout-gates` | ConsensusRetNet 金线（t41u/t42u）：坐标刻度、Abl 引导线、图表 z-order / 标记、Fig08 机制阶梯线。`paper-figure-quality-merge` 指的是这一份。 |
+| `paper-figure-layout-gates` | ConsensusRetNet 金线（t41u/t42u/t53u）：坐标刻度、Abl 引导线、图表 z-order / 标记、Fig08 机制阶梯线、`axis_arrows_outward_pass`。`paper-figure-quality-merge` 指的是这一份。 |
 | `paper-figure-layout-gates-2` | 文字入框（`text_in_box_pass`）、左右不镜像（`panel_side_match`）、Key 网格 IoU（`key_grid_iou`）。 |
 
 若加载器只认 YAML `name`，后拷贝的那一份会盖住前一份。需要指定某一份时，**按文件夹路径加载**，不要只凭 `name`。两份都要留在 workflows 根里。
+
+## t53u/t54u 追加
+
+1. 仓库根保留 `gold_bars/`。
+2. `ln -s /path/to/BotDraw/gold_bars FIG_ROOT/gold_bars`
+3. 新技能 `paper-figure-gold-bar-calibration` 由 botdraw 加载顺序拉起。

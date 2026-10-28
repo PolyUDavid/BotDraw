@@ -114,33 +114,40 @@ def find_overlaps(boxes):
 
 
 def pair_heights(orig, redraw):
+    """Pair by string sim; when scores tie/close, prefer spatially nearest (t48u)."""
     hr, items, miss = [], [], []
     for a in orig:
         na = norm(a["t"])
         if len(na) < 3 or a["c"] < 0.75:
             continue
-        best, bs = None, 0.0
+        cands = []
         for b in redraw:
             nb = norm(b["t"])
             if len(nb) < 3:
                 continue
             r = difflib.SequenceMatcher(None, na, nb).ratio()
-            if r > bs:
-                bs, best = r, b
-        if best and bs >= 0.85 and abs(len(norm(best["t"])) - len(na)) <= max(2, 0.15 * len(na)):
-            q = best["h"] / max(a["h"], 1e-6)
-            hr.append(q)
-            items.append(
-                {
-                    "orig": a["t"][:50],
-                    "redraw": best["t"][:50],
-                    "h_ratio": round(q, 3),
-                    "orig_h": round(a["h"], 1),
-                    "redraw_h": round(best["h"], 1),
-                }
-            )
-        else:
+            if r < 0.85:
+                continue
+            if abs(len(nb) - len(na)) > max(2, 0.15 * len(na)):
+                continue
+            dist = ((a["x"] - b["x"]) ** 2 + (a["y"] - b["y"]) ** 2) ** 0.5
+            cands.append((r, -dist, b))  # higher sim, then nearer
+        if not cands:
             miss.append(a["t"][:50])
+            continue
+        cands.sort(reverse=True)
+        best = cands[0][2]
+        q = best["h"] / max(a["h"], 1e-6)
+        hr.append(q)
+        items.append(
+            {
+                "orig": a["t"][:50],
+                "redraw": best["t"][:50],
+                "h_ratio": round(q, 3),
+                "orig_h": round(a["h"], 1),
+                "redraw_h": round(best["h"], 1),
+            }
+        )
     return hr, items, miss
 
 
