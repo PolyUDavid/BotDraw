@@ -11,7 +11,9 @@ mkdir -p "$BOT_WORKFLOWS_ROOT"
 cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 ```
 
-装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词；二者应同样拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw）。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration`、`paper-figure-media-slot-harmony` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+
+- **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md)。
 
 本地 Cursor 的粘贴提示词在 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)：对话里 `@botdraw`。
 
@@ -37,7 +39,7 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 通过条件：`qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真。字段见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。两道门禁都要过；只跑其中一道不算 PASS。
 
-## 要拷贝的技能文件夹（26）
+## 要拷贝的技能文件夹（27）
 
 - `a-ppt`
 - `advsci-endnote-polish`
@@ -58,6 +60,7 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 - `paper-figure-layout-distribution`
 - `paper-figure-layout-gates`
 - `paper-figure-layout-gates-2`
+- `paper-figure-media-slot-harmony`
 - `paper-figure-quality-merge`
 - `paper-figure-scene-ui`
 - `paper-figure-text-layout-clearance`

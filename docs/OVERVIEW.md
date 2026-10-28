@@ -10,6 +10,7 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
 2. `paper-figure-quality-merge`（总闸，入口会拉它）。
 3. 总闸锁定的栈，每张图都要：
    - `paper-figure-gold-bar-calibration` — `gold_bars/` 裁切 + checklist（t53u/t54u；散文不可单独 PASS）
+   - `paper-figure-media-slot-harmony` — t58u：边画边自检；完整媒体槽（禁裁半）；可选 AI 局部补槽。`@botdraw` 加载顺序包含本技能
    - `paper-figure-fig01-gold-bar` — 留白与流程金线
    - `paper-figure-full-omml` — 真 OMML + DrawingML Fallback
    - `paper-figure-arrow-proportion` — 杆与小尾巴
@@ -17,7 +18,7 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
    - `paper-figure-layout-gates` — 刻度、Abl 引导线、Fig08 阶梯线、`axis_arrows_outward_pass`
 4. 测量与版式：`paper-figure-hierarchical-measure`、`paper-figure-type-calibration`、`paper-figure-text-layout-clearance`、`paper-figure-layout-distribution`、`paper-figure-layout-gates-2`。
 5. 密图走 `paper-figure-dense-region-pipeline`：逐区画、SBS、冻结，再下一区。
-6. 交卷前 `paper-figure-indistinguishable-gate`。两道硬门禁都要过：`qa/<fig>_ocr_font_overlap.json` 里 `font_pass` 与 `overlap_pass` 都为真（t48u），且 `qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真（t49u）。另需 scene_ui 的 gold_bar 字段，有轴则 `axis_arrows_outward_pass`。失败裁剪交给 `paper-figure-feedback-to-skill`（新视觉类可新增 `gold_bars/<archetype>/`）。
+6. 交卷前 `paper-figure-indistinguishable-gate`。两道硬门禁都要过：`qa/<fig>_ocr_font_overlap.json` 里 `font_pass` 与 `overlap_pass` 都为真（t48u），且 `qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真（t49u）。另需 scene_ui 的 gold_bar 字段，有轴则 `axis_arrows_outward_pass`，以及 `qa/<fig>_media_slots.json` 每槽 `complete:true`（t58u）。失败裁剪交给 `paper-figure-feedback-to-skill`（新视觉类可新增 `gold_bars/<archetype>/`）。
 7. 绘制合同：`paper-figure-a-ppt` / `a-ppt`，叠齐用 `scientific-figure-faithful-replica` 与 `vector-ui-overlay-stack`。全套流程说明在 `ppt-blender`。
 8. A 通过后才做 `paper-figure-b-blender`。没有载具时 B 等于 A，在 QA 里注明。
 

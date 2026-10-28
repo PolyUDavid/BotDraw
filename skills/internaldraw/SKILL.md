@@ -2,8 +2,10 @@
 name: internaldraw
 description: >-
   Legacy alias for botdraw. Prefer loading botdraw (PolyUDavid/BotDraw primary
-  entry). Same full paper-figure redraw stack including gold_bars (t53u/t54u).
+  entry). Same full paper-figure redraw stack including gold_bars (t53u/t54u)
+  and media-slot-harmony (t58u).
 ---
 # internaldraw — legacy alias
 
 **请改用 [botdraw](sand-workflow:botdraw)。** 本技能仅为历史兼容；加载后按 botdraw 全套（含 gold_bar-calibration）执行。
+别名同样拉起 [paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)（t58u）；直接加载 botdraw 即包含该技能。
