@@ -14,6 +14,7 @@ cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词；二者应同样拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw）。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration`、`paper-figure-media-slot-harmony` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
 
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md)。
+- **t68u B：** 需要 B 时加载顺序含 `paper-figure-b-blender`。低质截图/灰块槽必须按 ORIG 构图用 Cycles 重建（硬件、线缆、屏幕；`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) 硬件三联。
 
 本地 Cursor 的粘贴提示词在 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)：对话里 `@botdraw`。
 

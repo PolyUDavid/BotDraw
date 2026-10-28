@@ -4,7 +4,8 @@ description: >-
   PRIMARY entry for BotDraw paper-figure redraw: 1:1 editable A-PPT (optional
   Blender B). Load first from PolyUDavid/BotDraw — quality-merge, gold_bars,
   OMML, arrows, scene UI, OCR+layout, media-slot harmony (t58u self-check + full
-  crops/AI fill). Use when user says botdraw / 论文插图 / redraw figures.
+  crops/AI fill), and t68u Cycles rebuild of low-quality B media slots.
+  Use when user says botdraw / 论文插图 / redraw figures.
 ---
 # botdraw — BotDraw 入口（主入口）
 
@@ -34,7 +35,7 @@ description: >-
 12. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
 13. paper-figure-indistinguishable-gate
 14. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
-15. 需要 B 时：paper-figure-b-blender
+15. 需要 B 时：paper-figure-b-blender（t68u：低质槽改 Cycles 重建，SAMPLES≥96）
 
 ## 非协商硬标准
 - 1:1 量测；禁整页截图/potrace 当可编辑交付
@@ -42,6 +43,7 @@ description: >-
 - gold_bars 分层 UI
 - 同 role 字号一致；**零叠字、零叠图**（门禁 PASS 仍须目视；漏检不算过）
 - **媒体槽完整**：禁截图裁半；优先完整 ORIG 裁切，不和谐时允许 AI 局部补图插入（见 media-slot-harmony）
+- **t68u B 媒体槽**：低质截图/裁切或过简灰块必须改 Blender Cycles 按 ORIG 构图重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例 Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）：必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。见 paper-figure-b-blender
 - 密图分区；**边画边 SBS/自检**
 
 ## PASS 前必跑

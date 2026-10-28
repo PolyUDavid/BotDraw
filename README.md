@@ -10,11 +10,12 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`botdraw`**。它会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。
+先加载 **`botdraw`**。它会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。需要 B 时再加载 `paper-figure-b-blender`（t68u：低质媒体槽改 Cycles 重建）。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。
 
 `internaldraw` 与 `internaldraw-2` 是历史别名，职责与 **botdraw** 相同；新对话请用 **botdraw**。二者同样应拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw，由其加载顺序带上该技能）。
 
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md) 与 [docs/T58U_MEDIA_SLOT.md](docs/T58U_MEDIA_SLOT.md)。
+- **t68u B：** 加载顺序第 15 步是 `paper-figure-b-blender`。B 媒体槽若将是低质截图/裁切或过简灰块 Cycles，必须按 ORIG 构图用 Blender Cycles 重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例：Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。
 
 安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。本地 Cursor 粘贴提示词见 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)（对话里 `@botdraw`）。
 
@@ -44,7 +45,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `paper-figure-feedback-to-skill` | 失败裁剪归档、映到门禁、必要时新增 gold_bar archetype、改技能，再重画。 |
 | `paper-figure-a-ppt` | A 版合同：每张图一个纯矢量可编辑 PPTX。 |
 | `a-ppt` | A 版执行：真 OMML、箭头小尾巴、分层 UI、重叠门禁、只缩不放。 |
-| `paper-figure-b-blender` | A 通过之后的 B 版：Cycles 载具/三维插图，标注仍可编辑。 |
+| `paper-figure-b-blender` | A 通过之后的 B 版（t68u）：低质截图/灰块槽改 Cycles 重建（硬件、线缆、屏幕；SAMPLES≥96），标注仍可编辑。 |
 | `ppt-blender` | 论文全套 A+B 重绘流程（一图一 PPTX、OMML、重叠硬门禁）。 |
 | `scientific-figure-faithful-replica` | 保真临摹，不是改设计：几何、图种、公式跟 ORIG。 |
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
@@ -80,6 +81,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 12. **Gold-bar 精致度（t53u/t54u）。** 散文「精致/ORIG级」不可单独 PASS。对照 `gold_bars/<archetype>/` 裁切与 checklist；icon SBS vs gold_bar。`qa/<fig>_scene_ui.json` 必含 `gold_bar_ref`、`layer_count`、`sulci_strokes`、`icon_sbs`、`pass`。
 13. **轴箭头朝外。** 有坐标轴则 `axis_arrows_outward_pass`：Y 顶朝上、X 右朝右；优先 poly tip；禁止 flip 把箭头画朝里。
 14. **媒体槽完整（t58u）。** 边画边自检叠字与裁半。禁止截图裁半。优先完整 ORIG 裁切；槽不完整或不和谐时允许局部 AI 补图插入（禁整页 AI）。`qa/<fig>_media_slots.json` 每槽 `complete:true`。技能 `paper-figure-media-slot-harmony`，由 `@botdraw` 加载。
+15. **B 媒体槽 Cycles 重建（t68u）。** B 槽若将是低质截图/裁切或过简灰块 Cycles，必须按 ORIG 构图用 Blender Cycles 重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例：Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。技能 `paper-figure-b-blender`，由 `@botdraw` 在需要 B 时加载。
 
 ## 工具
 

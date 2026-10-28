@@ -3,8 +3,9 @@ name: paper-figure-quality-merge
 description: >-
   Use when redrawing paper/SI figures as editable A-PPT and B+Blender with
   Confirmation-gold QA, full OMML, gold_bar UI, OCR+layout gates, media-slot
-  harmony (t58u: no cut-off crops, optional AI fill), and indistinguishable hard
-  gate. Load before drawing or claiming PASS.
+  harmony (t58u: no cut-off crops, optional AI fill), t68u Cycles rebuild of
+  low-quality B slots, and indistinguishable hard gate. Load before drawing
+  or claiming PASS.
 ---
 # Paper figure quality merge
 
@@ -23,6 +24,9 @@ description: >-
 7. type-calibration + text-layout-clearance
 8. layout-distribution
 Also: dense-region, hierarchical-measure, layout-gates-2, feedback-to-skill, b-blender.
+
+## t68u B（硬）
+B 媒体槽若只能是低质截图/裁切或过简灰块 Cycles，必须用 Blender Cycles 按 ORIG 构图重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例：Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。见 [paper-figure-b-blender](sand-workflow:paper-figure-b-blender)。
 
 ## Contract
 One PPTX/fig; slide=ORIG.

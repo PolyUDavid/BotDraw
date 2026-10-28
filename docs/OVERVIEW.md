@@ -20,7 +20,7 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
 5. 密图走 `paper-figure-dense-region-pipeline`：逐区画、SBS、冻结，再下一区。
 6. 交卷前 `paper-figure-indistinguishable-gate`。两道硬门禁都要过：`qa/<fig>_ocr_font_overlap.json` 里 `font_pass` 与 `overlap_pass` 都为真（t48u），且 `qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真（t49u）。另需 scene_ui 的 gold_bar 字段，有轴则 `axis_arrows_outward_pass`，以及 `qa/<fig>_media_slots.json` 每槽 `complete:true`（t58u）。失败裁剪交给 `paper-figure-feedback-to-skill`（新视觉类可新增 `gold_bars/<archetype>/`）。
 7. 绘制合同：`paper-figure-a-ppt` / `a-ppt`，叠齐用 `scientific-figure-faithful-replica` 与 `vector-ui-overlay-stack`。全套流程说明在 `ppt-blender`。
-8. A 通过后才做 `paper-figure-b-blender`。没有载具时 B 等于 A，在 QA 里注明。
+8. A 通过后才做 `paper-figure-b-blender`（t68u）。B 媒体槽若将是低质截图/裁切或过简灰块 Cycles，必须按 ORIG 构图用 Cycles 重建（硬件、线缆、屏幕；`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）。没有任何三维媒体槽时 B 等于 A，在 QA 里注明。
 
 `advsci-endnote-polish` 管 Advanced Science 稿件的文献、排版、润色和 EndNote，不参与插图绘制循环。
 
