@@ -10,13 +10,13 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`botdraw`**。新 bot 首次先跑加载顺序第 0 步 `paper-figure-onboard-selftest`（t69u），`qa/onboard_selftest.json` 的 `pass:true` 之后才画用户图。它会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。需要 B 时再加载 `paper-figure-b-blender`（t68u：糊截图或过简灰块 Cycles = FAIL）。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。
+先加载 **`botdraw`**。新 bot 首次先做下面的「新 bot：自检预调试」（t69u），`qa/onboard_selftest.json` 的 `ready:true` 之后才画用户图。它会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。需要 B 时再加载 `paper-figure-b-blender`（t68u：糊截图或过简灰块 Cycles = FAIL）。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。
 
 `internaldraw` 与 `internaldraw-2` 是历史别名，职责与 **botdraw** 相同；新对话请用 **botdraw**。二者同样应拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw，由其加载顺序带上该技能）。
 
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md) 与 [docs/T58U_MEDIA_SLOT.md](docs/T58U_MEDIA_SLOT.md)。
 - **t68u B：** 加载顺序第 15 步是 `paper-figure-b-blender`。糊截图或过简灰块 Cycles = FAIL；须按 ORIG 构图用 Confirmation Cycles 重建（`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) HIL / FiSens / PV。
-- **t69u：** 加载顺序第 0 步是 `paper-figure-onboard-selftest`。新 bot 首次：跑 onboard selftest，PASS 后再画。证明文件 `qa/onboard_selftest.json`（含 pass 标志与 `sbs_path`）。无此 artifact 不得宣称 ready。t68u 在自测之后仍然有效。
+- **t69u：** 加载顺序第 0 步是 `paper-figure-onboard-selftest`。见下方「新 bot：自检预调试」。`qa/onboard_selftest.json` 的 `ready:true` 之后才画。t68u 在自测之后仍然有效。
 
 安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。本地 Cursor 粘贴提示词见 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)（对话里 `@botdraw`）。
 
@@ -28,7 +28,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `internaldraw` | 历史别名，指向 `botdraw`（含 gold-bar 与 media-slot-harmony）。新对话请用 botdraw。 |
 | `internaldraw-2` | 历史别名，指向 `botdraw`（与 `internaldraw` 同一套门禁，含 gold-bar 与 media-slot-harmony）。 |
 | `getting-started` | 新 bot 首次对话：问清语言、Drive、期刊与风格参考。用户图之前先过 onboard selftest。 |
-| `paper-figure-onboard-selftest` | t69u：自检环境，对照 `fixtures/onboard/` 跑通 OCR+布局门禁并调到 PASS。未 PASS 不开用户图。 |
+| `paper-figure-onboard-selftest` | t69u：自检预调试。对照 `fixtures/onboard/` 跑 OnboardDemo，`qa/onboard_selftest.json` 的 `ready:true` 之后才开用户图。 |
 | `paper-figure-quality-merge` | 总闸。锁定金线栈（含 gold_bars、t58u media-slot-harmony、t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。散文「精致」不可单独 PASS。 |
 | `paper-figure-gold-bar-calibration` | 跨 bot 精致度主标准：`gold_bars/` 裁切 + checklist。禁散文单独 PASS。 |
 | `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准；UI 对照 gold_bars。 |
@@ -84,7 +84,12 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 13. **轴箭头朝外。** 有坐标轴则 `axis_arrows_outward_pass`：Y 顶朝上、X 右朝右；优先 poly tip；禁止 flip 把箭头画朝里。
 14. **媒体槽完整（t58u）。** 边画边自检叠字与裁半。禁止截图裁半。优先完整 ORIG 裁切；槽不完整或不和谐时允许局部 AI 补图插入（禁整页 AI）。`qa/<fig>_media_slots.json` 每槽 `complete:true`。技能 `paper-figure-media-slot-harmony`，由 `@botdraw` 加载。
 15. **B 媒体槽 Cycles 重建（t68u）。** 糊截图或过简灰块 Cycles = FAIL。须按 ORIG 构图用 Blender Cycles 重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例：Fig08 (a) HIL / FiSens / PV 必须 Cycles inset。技能 `paper-figure-b-blender`，由 `@botdraw` 在需要 B 时加载。自测通过后此禁令仍然有效。
-16. **新 bot 先自测（t69u）。** 克隆安装后先跑 `python3 tools/onboard_selftest.py`。`qa/onboard_selftest.json` 必须 `pass:true`（含 `h_med`、叠字 0、布局三旗、`media_slot_complete`、`sbs_path`）。禁止无 artifact 宣称 ready。未 PASS 不要打开用户 `FIG_ROOT`。技能 `paper-figure-onboard-selftest`，是 `@botdraw` 加载顺序第 0 步。
+16. **新 bot：自检预调试（t69u）。** 克隆安装后先跑下面两道门禁。证明文件 `qa/onboard_selftest.json` 必须 `ready:true`。禁止无 artifact 宣称 ready。未 ready 不要打开用户 `FIG_ROOT`。技能 `paper-figure-onboard-selftest`，是 `@botdraw` 加载顺序第 0 步。
+
+```bash
+FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
+FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
+```
 
 ## 工具
 
@@ -92,9 +97,21 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 - `tools/ocr_font_overlap_gate.py`（Kevin t48u）：对 ORIG 比字高（`font_pass` / `h_med`），并检查 A 预览墨迹框叠字（`overlap_pass`）。用法见 [docs/OCR_FONT_OVERLAP_GATE.md](docs/OCR_FONT_OVERLAP_GATE.md)。
 - `tools/layout_type_shape_gate.py`（Kevin t49u）：同一 `(panel, role)` 字号锁定（`type_uniform_pass`），卡片/图标兄弟形状不叠图（`shape_overlap_pass`），文字不骑非父级图形（`text_shape_clear_pass`）。用法见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。
-- `tools/onboard_selftest.py`（Kevin t69u）：新 bot 首次对照 `fixtures/onboard/` 自检环境并调到门禁 PASS，写出 `qa/onboard_selftest.json`。未 PASS 不要画用户图。
+- `tools/onboard_selftest.py`（Kevin t69u）：新 bot 首次对照 `fixtures/onboard/` 产出 OnboardDemo，跑上面两道门禁，写出 `qa/onboard_selftest.json`（`ready:true`）。未 ready 不要画用户图。
 
 它们不携带论文数据。默认路径指向操作者自己的工作区，运行前改成你的目录，或把 PPTX 路径传给 `audit_omml_arrows.py`。不要把生成的 `*.pptx`、`qa/*.json` 或 `.ocr_cache/` 提交进本仓库。
+
+## 新 bot：自检预调试
+
+克隆本仓库、把 `skills/` 装进 workflows 之后，任何用户图之前：
+
+```bash
+python3 tools/onboard_selftest.py
+FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
+FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
+```
+
+证明文件是 `qa/onboard_selftest.json`，其中 `ready` 必须为 true，并指向 `qa/OnboardDemo_ocr_font_overlap.json`、`qa/OnboardDemo_layout_type_shape.json`、`qa/OnboardDemo_whole_sbs.png`。夹具说明在 [fixtures/onboard/README.md](fixtures/onboard/README.md)（媒体槽用完整 `gold_bars/brain_layered/orig.png`）。t68u：糊截图或过简灰块仍禁止当 B。
 
 ## 仓库里没有的东西
 

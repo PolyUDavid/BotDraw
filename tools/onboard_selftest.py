@@ -3,7 +3,7 @@
 
 Self-detects the BotDraw environment, draws the bundled fixtures/onboard
 mini panel, and tunes type scale + clearance until the real OCR and layout
-gates pass. Writes qa/onboard_selftest.json. Exit 0 only when pass is true.
+gates pass. Writes qa/onboard_selftest.json. Exit 0 only when ready is true.
 
   python3 tools/onboard_selftest.py
   python3 tools/onboard_selftest.py --emit-fixture
@@ -27,7 +27,7 @@ FIXTURE = REPO / "fixtures" / "onboard"
 SPEC_PATH = FIXTURE / "spec.json"
 ORIG_PATH = FIXTURE / "orig.png"
 EXPECTED_PATH = FIXTURE / "expected.json"
-TAG = "Onboard"
+TAG = "OnboardDemo"
 EMU_PER_PX = 9525
 FONT_CANDIDATES = [
     Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
@@ -452,13 +452,19 @@ def main() -> None:
 
     detected = detect_env()
     out = args.out
-    sbs = out.parent / "onboard_sbs.png"
+    qa_dir = out.parent
+    sbs_name = f"{TAG}_whole_sbs.png"
+    ocr_name = f"{TAG}_ocr_font_overlap.json"
+    layout_name = f"{TAG}_layout_type_shape.json"
     report = {
+        "ready": False,
+        "ocr": f"qa/{ocr_name}",
+        "layout": f"qa/{layout_name}",
+        "sbs": f"qa/{sbs_name}",
+        "notes": "t69u",
         "version": "2026-10-28-t69u",
         "skill": "paper-figure-onboard-selftest",
         "fig": TAG,
-        "pass": False,
-        "ready_for_user_figures": False,
         "env_pass": detected["env_pass"],
         "proof_pass": False,
         "font_pass": False,
@@ -469,7 +475,6 @@ def main() -> None:
         "shape_overlap_pass": False,
         "text_shape_clear_pass": False,
         "media_slot_complete": False,
-        "sbs_path": str(sbs.relative_to(REPO)) if sbs.is_relative_to(REPO) else str(sbs),
         "fixture": "fixtures/onboard/orig.png",
         "gold_bar_ref": "gold_bars/brain_layered",
         "tuned_rounds": 0,
@@ -508,23 +513,28 @@ def main() -> None:
                     "media_slot_complete",
                 )
             ))
+            qa_dir.mkdir(parents=True, exist_ok=True)
+            for name in (ocr_name, layout_name):
+                src = scratch / "qa" / name
+                if src.exists():
+                    shutil.copyfile(src, qa_dir / name)
             if tuned["prev"].exists():
-                write_sbs(tuned["orig"], tuned["prev"], sbs)
+                write_sbs(tuned["orig"], tuned["prev"], qa_dir / sbs_name)
         finally:
             shutil.rmtree(scratch, ignore_errors=True)
-    report["pass"] = bool(report["env_pass"] and report["proof_pass"])
-    report["ready_for_user_figures"] = report["pass"]
-    if not report["pass"] and report["env_pass"]:
+    report["ready"] = bool(report["env_pass"] and report["proof_pass"])
+    if not report["ready"] and report["env_pass"]:
         report["blockers"] = list(report["blockers"]) + ["onboard proof did not pass; do not start user figures"]
+        report["notes"] = "t69u ready:false"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({k: report[k] for k in (
-        "pass", "ready_for_user_figures", "env_pass", "proof_pass", "h_med",
+        "ready", "ocr", "layout", "sbs", "notes", "h_med",
         "font_pass", "overlap_pass", "type_uniform_pass", "shape_overlap_pass",
-        "text_shape_clear_pass", "media_slot_complete", "tuned_rounds", "sbs_path",
+        "text_shape_clear_pass", "media_slot_complete", "tuned_rounds",
         "blockers", "warnings",
     )}, indent=2, ensure_ascii=False))
-    sys.exit(0 if report["pass"] else 1)
+    sys.exit(0 if report["ready"] else 1)
 
 
 if __name__ == "__main__":

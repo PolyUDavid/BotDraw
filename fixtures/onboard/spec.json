@@ -1,5 +1,5 @@
 {
-  "fig": "Onboard",
+  "fig": "OnboardDemo",
   "canvas": [960, 560],
   "gold_inset": "gold_bars/brain_layered/orig.png",
   "gold_bar_checklist": "gold_bars/brain_layered/checklist.md",

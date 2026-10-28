@@ -10,16 +10,29 @@ cd BotDraw
 mkdir -p "$BOT_WORKFLOWS_ROOT"
 cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 
-# 新 bot 首次：环境自检 + 固定金标证明。PASS 之前不要画用户图。
+# 新 bot：自检预调试。ready:true 之前不要画用户图。
 python3 tools/onboard_selftest.py
-# 期望 qa/onboard_selftest.json 里 "pass": true
+FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
+FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
+# 证明文件 qa/onboard_selftest.json 里 "ready": true
 ```
 
-装完后，新对话先加载文件夹 **`botdraw`**。加载顺序第 0 步是 `paper-figure-onboard-selftest`（t69u）：新 bot 首次跑 onboard selftest，PASS 后再画。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词；二者应同样拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw）。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration`、`paper-figure-media-slot-harmony` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+装完后，新对话先加载文件夹 **`botdraw`**。加载顺序第 0 步是 `paper-figure-onboard-selftest`（t69u）：`qa/onboard_selftest.json` 的 `ready:true` 之后再画。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词；二者应同样拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw）。主入口会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration`、`paper-figure-media-slot-harmony` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
 
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md)。
 - **t68u B：** 需要 B 时加载顺序含 `paper-figure-b-blender`。糊截图或过简灰块 Cycles = FAIL；按 ORIG 用 Confirmation Cycles 重建（`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) HIL / FiSens / PV。自测之后仍然有效。
-- **t69u：** 新 bot 首次跑 `python3 tools/onboard_selftest.py`。`qa/onboard_selftest.json` 必须 `pass:true`（字号 `h_med`、叠字 0、布局门禁、一个媒体槽 SBS）。无此文件不得宣称 ready，不得开始用户 `FIG_ROOT`。
+
+## 新 bot：自检预调试
+
+`qa/onboard_selftest.json` 必须 `"ready": true`。无此文件不得宣称 ready，不得开始用户 `FIG_ROOT`。命令：
+
+```bash
+python3 tools/onboard_selftest.py
+FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
+FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
+```
+
+夹具 [fixtures/onboard/README.md](fixtures/onboard/README.md) 指向 `gold_bars/brain_layered`，并说明如何产出 OnboardDemo。t68u 粗糙 B 禁令在自测之后仍然有效。
 
 本地 Cursor 的粘贴提示词在 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)：对话里 `@botdraw`。
 

@@ -2,11 +2,8 @@
 name: botdraw
 description: >-
   PRIMARY entry for BotDraw paper-figure redraw: 1:1 editable A-PPT (optional
-  Blender B). Load first from PolyUDavid/BotDraw — quality-merge, gold_bars,
-  OMML, arrows, scene UI, OCR+layout, media-slot harmony; t68u crude-B ban
-  (rebuild Cycles for hardware). Step 0 is paper-figure-onboard-selftest
-  (t69u): qa/onboard_selftest.json must pass before any user figure.
-  Use when user says botdraw / 论文插图 / redraw figures.
+  Blender B). New bots must run paper-figure-onboard-selftest (t69u) until proof
+  PASS before user figures; includes t68u crude-B ban.
 ---
 # botdraw — BotDraw 入口（主入口）
 
@@ -15,8 +12,10 @@ description: >-
 这是 **BotDraw 技能包的唯一推荐入口**。本地 Cursor / 下一台 Bot：先加载本技能，再画图。
 （历史别名：`internaldraw` / `internaldraw-2`，新对话请用 **botdraw**。）
 
-## 新 bot 首次（t69u）
-先跑 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)：`python3 tools/onboard_selftest.py`。`qa/onboard_selftest.json` 的 `pass:true` 之前，不要接受用户 FIG_ROOT。禁止无 artifact 宣称 ready。t68u 粗糙 B 禁令在自测之后仍然有效。
+## 新 bot 强制预调试（Kevin t69u）
+下载/安装本仓库后，**先**加载并跑完 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)：
+环境探测 → 固定夹具试画 → OCR+layout 数字证明 → FAIL 则自调再证 → `qa/onboard_selftest.json` 里 `ready:true` **之后**，才允许开用户 FIG_ROOT。
+禁止用「环境应该没问题」跳过；效果达不到当前金标就继续调，不要急着画用户图。
 
 ## 跨 bot 可复现（Kevin t54u）
 - 不可靠：纯散文「精致/ORIG级」
@@ -25,7 +24,7 @@ description: >-
 详见 [paper-figure-gold-bar-calibration](sand-workflow:paper-figure-gold-bar-calibration)、[paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
 
 ## 加载顺序（强制）
-0. **paper-figure-onboard-selftest（t69u）** — 新 bot 首次：跑 onboard selftest，PASS 后再画
+0. **paper-figure-onboard-selftest**（新 bot / 换机首次；`ready:true` 可跳过）
 1. **本技能 botdraw**
 2. paper-figure-quality-merge
 3. paper-figure-gold-bar-calibration
@@ -49,7 +48,6 @@ description: >-
 - 同 role 字号一致；**零叠字、零叠图**（门禁 PASS 仍须目视；漏检不算过）
 - **媒体槽完整**：禁截图裁半；优先完整 ORIG 裁切，不和谐时允许 AI 局部补图插入（见 media-slot-harmony）
 - **B 硬件/车辆槽（t68u）**：糊截图或过简灰块 Cycles = FAIL；须按 ORIG 构图用 Confirmation Cycles 重建（例：Fig08 HIL/FiSens/PV）
-- **先自测（t69u）**：没有 `qa/onboard_selftest.json`，或其中 `pass` 不为 true，禁止开始用户图
 - 密图分区；**边画边 SBS/自检**
 
 ## PASS 前必跑

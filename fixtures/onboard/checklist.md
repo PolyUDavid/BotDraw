@@ -11,7 +11,7 @@ Mini panel used by `tools/onboard_selftest.py` before any user figure. This is n
 Brain fineness still follows `gold_bars/brain_layered/checklist.md` (layers, sulci, icon SBS). Passing onboard only proves the new bot can run the gates and tune type/clearance.
 
 ## Proof (not prose)
-`qa/onboard_selftest.json` must exist with `pass: true` before user `FIG_ROOT` work. Required flags: `font_pass`, `overlap_pass` (n_overlap = 0), `h_med` inside the t48u band, `type_uniform_pass`, `shape_overlap_pass`, `text_shape_clear_pass`, `media_slot_complete`, plus `sbs_path`.
+`qa/onboard_selftest.json` must exist with `ready: true` before user `FIG_ROOT` work. The figure id is `OnboardDemo`. Gates must show `overlap_pass`, `h_med` inside the t48u band, and layout PASS. SBS path is `qa/OnboardDemo_whole_sbs.png`.
 
 ## After onboard
 t68u still applies: Fig08 (a) HIL / FiSens / PV must be Confirmation Cycles, not grey blocks or blurry screenshots.
