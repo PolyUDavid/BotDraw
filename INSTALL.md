@@ -11,7 +11,9 @@ mkdir -p "$BOT_WORKFLOWS_ROOT"
 cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 ```
 
-装完后，新对话先加载文件夹 **`internaldraw`**。若这台 bot 上该 id 已被占用，改加载 **`internaldraw-2`**。二者都会拉起 `paper-figure-quality-merge` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+装完后，新对话先加载文件夹 **`botdraw`**。`internaldraw` 与 `internaldraw-2` 是历史别名，仅兼容旧提示词。主入口会拉起 `paper-figure-quality-merge` 以及 OMML、箭头、分层 UI、t48u OCR 字号+叠字门禁、t49u 同类型字号+叠图门禁和其余门禁。
+
+本地 Cursor 的粘贴提示词在 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)：对话里 `@botdraw`。
 
 `tools/` 留在克隆目录里按需运行，不必拷进 workflows 根。`fig_gate_audit.py` 需要本机已安装的 Python 3、`lxml`、`Pillow`，并且它写死了操作者工作区路径，跑之前改 `ROOT`。`audit_omml_arrows.py` 接受 PPTX 路径参数：
 
@@ -35,10 +37,11 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 通过条件：`qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真。字段见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。两道门禁都要过；只跑其中一道不算 PASS。
 
-## 要拷贝的技能文件夹（23）
+## 要拷贝的技能文件夹（24）
 
 - `a-ppt`
 - `advsci-endnote-polish`
+- `botdraw`
 - `internaldraw`
 - `internaldraw-2`
 - `paper-figure-a-ppt`

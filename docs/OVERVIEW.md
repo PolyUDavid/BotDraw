@@ -2,9 +2,11 @@
 
 BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹成可编辑纯矢量 A-PPTX，需要三维载具时再加 Blender B。仓库只放技能和审计脚本。
 
+本地 Cursor 把 [MASTER_PROMPT_zh.md](MASTER_PROMPT_zh.md) 整段粘进对话，并先加载 `botdraw`（`@botdraw`）。
+
 ## 加载顺序
 
-1. `internaldraw` 或 `internaldraw-2`（入口，二选一）。
+1. `botdraw`（主入口，先加载）。`internaldraw` 与 `internaldraw-2` 是历史别名，加载后按 botdraw 全套执行。
 2. `paper-figure-quality-merge`（总闸，入口会拉它）。
 3. 总闸锁定的五份，每张图都要：
    - `paper-figure-fig01-gold-bar` — 留白与流程金线

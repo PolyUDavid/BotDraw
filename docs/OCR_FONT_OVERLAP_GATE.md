@@ -2,8 +2,9 @@
 
 English: hard gate that compares A-preview OCR ink height to ORIG (`h_med`) and rejects text–text bbox collisions before any PASS, freeze, or upload.
 
-`tools/ocr_font_overlap_gate.py` is already in this repo. The six skills that require it are already updated:
+`tools/ocr_font_overlap_gate.py` is already in this repo. The skills that require it are already updated:
 
+- `botdraw`
 - `internaldraw`
 - `internaldraw-2`
 - `paper-figure-quality-merge`
@@ -24,6 +25,6 @@ FIG_ROOT=<figroot> python tools/ocr_font_overlap_gate.py A FigXX
 - `font_pass: true`（对 ORIG 的 OCR 字高 h_med）
 - `overlap_pass: true`（A 预览 OCR 墨迹框叠字 = 0）
 
-仅 office check-overlap 不够。入口仍是 `internaldraw`。
+仅 office check-overlap 不够。入口是 `botdraw`。`internaldraw` / `internaldraw-2` 是历史别名。
 
 `FIG_ROOT` 是操作者自己的图目录（`orig/`、`prev/<A|B>/`、写出的 `qa/`）。本仓库不含论文图。不要把生成的 `qa/*.json` 或 `.ocr_cache/` 提交进来。脚本需要本机 Python 3、`Pillow`、`rapidocr_onnxruntime`。任一图未过硬门禁时进程退出码为 1。

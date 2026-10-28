@@ -1,11 +1,7 @@
 ---
 name: internaldraw-2
-description: >-
-  Use when redrawing paper/SI/extended-data figures as 1:1 editable vector A-PPT
-  (optional Blender B): same as internaldraw — full OMML, layered refined UI,
-  arrow tails, OCR + same-type/叠图 layout gates. Load this first; it pulls the
-  rest.
+description: Legacy alias for botdraw. Prefer botdraw. Same full paper-figure redraw stack.
 ---
-# internaldraw-2
+# internaldraw-2（历史别名）
 
-Same entry as [internaldraw](sand-workflow:internaldraw): quality-merge + full-omml + arrow-proportion + scene-ui + t48u OCR + **t49u layout-distribution** (`ocr_font_overlap_gate.py` + `layout_type_shape_gate.py`).
+**请改用主入口 [botdraw](sand-workflow:botdraw)。** 与 botdraw / internaldraw 同一套门禁。

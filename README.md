@@ -10,16 +10,19 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`internaldraw`**（或备用入口 **`internaldraw-2`**）。它会拉起 `paper-figure-quality-merge`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、精致分层 UI、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 直接画图或宣称 PASS。
+先加载 **`botdraw`**。它会拉起 `paper-figure-quality-merge`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、精致分层 UI、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 直接画图或宣称 PASS。
 
-安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。
+`internaldraw` 与 `internaldraw-2` 是历史别名，职责与 **botdraw** 相同；新对话请用 **botdraw**。
+
+安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。本地 Cursor 粘贴提示词见 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)（对话里 `@botdraw`）。
 
 ## 技能一览
 
 | 文件夹 | 一句话职责 |
 | --- | --- |
-| `internaldraw` | 入口。先加载本技能，再拉 quality-merge、t48u OCR 门禁、t49u 同类型/叠图门禁与其余门禁。 |
-| `internaldraw-2` | 与 `internaldraw` 相同的备用入口（另一文件夹，职责相同，含 t48u OCR 与 t49u 布局门禁）。 |
+| `botdraw` | 主入口。先加载本技能，再拉 quality-merge、t48u OCR 门禁、t49u 同类型/叠图门禁与其余门禁。 |
+| `internaldraw` | 历史别名，指向 `botdraw`。新对话请用 botdraw。 |
+| `internaldraw-2` | 历史别名，指向 `botdraw`（与 `internaldraw` 同一套门禁）。 |
 | `paper-figure-quality-merge` | 总闸。锁定金线栈（含 t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。 |
 | `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准。 |
 | `paper-figure-full-omml` | 全真可编辑 OMML，且 Fallback 预览要像 ORIG 的 LaTeX。 |
@@ -42,7 +45,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
 | `advsci-endnote-polish` | Advanced Science 文献核实、排版、润色与 EndNote（稿件技能，不是插图绘制）。 |
 
-共 23 个技能文件夹，每个里面一份 `SKILL.md`。
+共 24 个技能文件夹，每个里面一份 `SKILL.md`。
 
 ## 硬门禁（ConsensusRetNet 金线）
 
