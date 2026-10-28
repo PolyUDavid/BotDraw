@@ -1,0 +1,58 @@
+# 安装 BotDraw
+
+把本仓库的 `skills/` 拷进下一台 Grok Bot / Cursor Agent 的 **workflows 根目录**（该目录下每个子文件夹一份 `SKILL.md`，由 bot 按文件夹发现）。
+
+```bash
+git clone https://github.com/PolyUDavid/BotDraw.git
+cd BotDraw
+
+# 将 $BOT_WORKFLOWS_ROOT 换成这台 bot 实际的 workflows 根
+mkdir -p "$BOT_WORKFLOWS_ROOT"
+cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
+```
+
+装完后，新对话先加载文件夹 **`internaldraw`**。若这台 bot 上该 id 已被占用，改加载 **`internaldraw-2`**。二者都会拉起 `paper-figure-quality-merge` 以及 OMML、箭头、分层 UI 和其余门禁。
+
+`tools/` 留在克隆目录里按需运行，不必拷进 workflows 根。`fig_gate_audit.py` 需要本机已安装的 Python 3、`lxml`、`Pillow`，并且它写死了操作者工作区路径，跑之前改 `ROOT`。`audit_omml_arrows.py` 接受 PPTX 路径参数：
+
+```bash
+python3 tools/audit_omml_arrows.py /path/to/Fig01.pptx
+```
+
+## 要拷贝的技能文件夹（22）
+
+- `a-ppt`
+- `advsci-endnote-polish`
+- `internaldraw`
+- `internaldraw-2`
+- `paper-figure-a-ppt`
+- `paper-figure-arrow-proportion`
+- `paper-figure-b-blender`
+- `paper-figure-dense-region-pipeline`
+- `paper-figure-feedback-to-skill`
+- `paper-figure-fig01-gold-bar`
+- `paper-figure-full-omml`
+- `paper-figure-hierarchical-measure`
+- `paper-figure-indistinguishable-gate`
+- `paper-figure-layout-gates`
+- `paper-figure-layout-gates-2`
+- `paper-figure-quality-merge`
+- `paper-figure-scene-ui`
+- `paper-figure-text-layout-clearance`
+- `paper-figure-type-calibration`
+- `ppt-blender`
+- `scientific-figure-faithful-replica`
+- `vector-ui-overlay-stack`
+
+每个文件夹只含 `SKILL.md`。不要改名，入口技能按文件夹名加载。
+
+## 名称冲突：`layout-gates` 与 `layout-gates-2`
+
+这两个文件夹的 YAML 都写成了 `name: paper-figure-layout-gates`：
+
+| 文件夹 | 内容 |
+| --- | --- |
+| `paper-figure-layout-gates` | ConsensusRetNet 金线（t41u/t42u）：坐标刻度、Abl 引导线、图表 z-order / 标记、Fig08 机制阶梯线。`paper-figure-quality-merge` 指的是这一份。 |
+| `paper-figure-layout-gates-2` | 文字入框（`text_in_box_pass`）、左右不镜像（`panel_side_match`）、Key 网格 IoU（`key_grid_iou`）。 |
+
+若加载器只认 YAML `name`，后拷贝的那一份会盖住前一份。需要指定某一份时，**按文件夹路径加载**，不要只凭 `name`。两份都要留在 workflows 根里。

@@ -1,0 +1,37 @@
+# OS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.swp
+*~
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Generated decks — never commit figure PPTX
+*.pptx
+*.ppt
+
+# Secrets and private local trees
+.env
+.env.*
+*.pem
+*.key
+credentials/
+secrets/
+private/
+paper_data/
+user_feedback_*/
