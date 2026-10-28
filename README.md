@@ -10,7 +10,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`internaldraw`**（或备用入口 **`internaldraw-2`**）。它会拉起 `paper-figure-quality-merge`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、精致分层 UI、t48u OCR 字号与叠字硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 直接画图或宣称 PASS。
+先加载 **`internaldraw`**（或备用入口 **`internaldraw-2`**）。它会拉起 `paper-figure-quality-merge`，再带上 Fig01 金线、全真 OMML、箭头小尾巴、精致分层 UI、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。不要跳过 quality-merge 直接画图或宣称 PASS。
 
 安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。
 
@@ -18,20 +18,21 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 | 文件夹 | 一句话职责 |
 | --- | --- |
-| `internaldraw` | 入口。先加载本技能，再拉 quality-merge、t48u OCR 门禁与其余门禁。 |
-| `internaldraw-2` | 与 `internaldraw` 相同的备用入口（另一文件夹，职责相同，含 t48u OCR 门禁）。 |
-| `paper-figure-quality-merge` | 总闸。锁定金线栈（含 t48u OCR 字号+叠字）；画前或宣称 PASS 前必载。 |
+| `internaldraw` | 入口。先加载本技能，再拉 quality-merge、t48u OCR 门禁、t49u 同类型/叠图门禁与其余门禁。 |
+| `internaldraw-2` | 与 `internaldraw` 相同的备用入口（另一文件夹，职责相同，含 t48u OCR 与 t49u 布局门禁）。 |
+| `paper-figure-quality-merge` | 总闸。锁定金线栈（含 t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。 |
 | `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准。 |
 | `paper-figure-full-omml` | 全真可编辑 OMML，且 Fallback 预览要像 ORIG 的 LaTeX。 |
 | `paper-figure-arrow-proportion` | 有向边必须是杆 + 可见小尾巴；禁裸三角与巨头。 |
 | `paper-figure-scene-ui` | 每图强制精致分层 UI（脑、齿轮、图标一层层贴）。 |
 | `paper-figure-layout-gates` | 坐标刻度、Abl 引导线、图表层级、Fig08 机制阶梯线。 |
 | `paper-figure-layout-gates-2` | 文字入框、左右不镜像、Key 网格 IoU。YAML `name` 与上一文件夹冲突，按路径加载。 |
-| `paper-figure-text-layout-clearance` | 整块文本框、边距，以及文字与线/箭头/图标的间隙；t48u OCR 叠字硬门禁。 |
-| `paper-figure-type-calibration` | 按 ORIG 测高再落字；禁止整页统一放大当唯一修复；t48u OCR 字号硬门禁。 |
-| `paper-figure-hierarchical-measure` | 大面板 → 小模块 → 整块文本；ORIG 像素 1:1 映到 PPT。 |
+| `paper-figure-text-layout-clearance` | 整块文本框、边距，以及文字与线/箭头/图标的间隙；t48u OCR 叠字与 t49u 叠图硬门禁。 |
+| `paper-figure-type-calibration` | 按 ORIG 测高再落字；禁止整页统一放大当唯一修复；t48u OCR 字号与 t49u 同类型字号锁定。 |
+| `paper-figure-hierarchical-measure` | 大面板 → 小模块 → 整块文本；同一 `(panel, role)` 共用字号；ORIG 像素 1:1 映到 PPT。 |
 | `paper-figure-dense-region-pipeline` | 密图分区冻结：切片、zoom-trace、逐区画完再冻结。 |
-| `paper-figure-indistinguishable-gate` | 交付前对照 ORIG 自检（含 OCR `font_pass` ∧ `overlap_pass`）；任一硬缺陷即 FAIL。 |
+| `paper-figure-layout-distribution` | 同类型字号锁定、叠图与 ORIG 间距；t49u `layout_type_shape_gate`。 |
+| `paper-figure-indistinguishable-gate` | 交付前对照 ORIG 自检（OCR `font_pass` ∧ `overlap_pass`，以及 t49u `type_uniform_pass` ∧ `shape_overlap_pass` ∧ `text_shape_clear_pass`）；任一硬缺陷即 FAIL。 |
 | `paper-figure-feedback-to-skill` | 失败裁剪归档、映到门禁、改技能，再重画。 |
 | `paper-figure-a-ppt` | A 版合同：每张图一个纯矢量可编辑 PPTX。 |
 | `a-ppt` | A 版执行：真 OMML、箭头小尾巴、分层 UI、重叠门禁、只缩不放。 |
@@ -41,7 +42,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
 | `advsci-endnote-polish` | Advanced Science 文献核实、排版、润色与 EndNote（稿件技能，不是插图绘制）。 |
 
-共 22 个技能文件夹，每个里面一份 `SKILL.md`。
+共 23 个技能文件夹，每个里面一份 `SKILL.md`。
 
 ## 硬门禁（ConsensusRetNet 金线）
 
@@ -57,10 +58,16 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 8. **不可区分门禁。** 交卷前写 SBS 与 `qa/<fig>_indistinguishable.json`。读者看得见的重叠、错内容、假公式、劣箭头、粗糙 UI，任一即 FAIL。
 9. **密图分区冻结。** 高密度图先切片和 zoom-trace，一个区域做完分层 UI、OMML、箭头并 SBS 通过后再冻结；兄弟面板对齐最好的那一块，不得逐图降级。
 10. **OCR 字号 + 叠字（t48u）。** 宣称 PASS / 冻结前跑 `tools/ocr_font_overlap_gate.py`。`qa/<fig>_ocr_font_overlap.json` 必须 `font_pass` 且 `overlap_pass`。只靠 office check-overlap 不算过。
+11. **同类型字号 + 叠图（t49u）。** 同一轮再跑 `tools/layout_type_shape_gate.py`。`qa/<fig>_layout_type_shape.json` 必须 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass`。只过 t48u OCR、同一 role 字号不齐、或卡片/图标仍叠，都不算过。
 
 ## 工具
 
-`tools/fig_gate_audit.py` 与 `tools/audit_omml_arrows.py` 是本地 PPTX 审计脚本（OMML、Fallback 泄漏、箭头杆）。`tools/ocr_font_overlap_gate.py` 是 Kevin t48u OCR 硬门禁：对 ORIG 比字高（`font_pass` / `h_med`），并检查 A 预览墨迹框叠字（`overlap_pass`）。宣称 PASS 前必须跑过，用法见 [docs/OCR_FONT_OVERLAP_GATE.md](docs/OCR_FONT_OVERLAP_GATE.md)。它们不携带论文数据。默认路径指向操作者自己的工作区，运行前改成你的目录，或把 PPTX 路径传给 `audit_omml_arrows.py`。不要把生成的 `*.pptx`、`qa/*.json` 或 `.ocr_cache/` 提交进本仓库。
+`tools/fig_gate_audit.py` 与 `tools/audit_omml_arrows.py` 是本地 PPTX 审计脚本（OMML、Fallback 泄漏、箭头杆）。宣称 PASS 前必须同时跑过两道硬门禁：
+
+- `tools/ocr_font_overlap_gate.py`（Kevin t48u）：对 ORIG 比字高（`font_pass` / `h_med`），并检查 A 预览墨迹框叠字（`overlap_pass`）。用法见 [docs/OCR_FONT_OVERLAP_GATE.md](docs/OCR_FONT_OVERLAP_GATE.md)。
+- `tools/layout_type_shape_gate.py`（Kevin t49u）：同一 `(panel, role)` 字号锁定（`type_uniform_pass`），卡片/图标兄弟形状不叠图（`shape_overlap_pass`），文字不骑非父级图形（`text_shape_clear_pass`）。用法见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。
+
+它们不携带论文数据。默认路径指向操作者自己的工作区，运行前改成你的目录，或把 PPTX 路径传给 `audit_omml_arrows.py`。不要把生成的 `*.pptx`、`qa/*.json` 或 `.ocr_cache/` 提交进本仓库。
 
 ## 仓库里没有的东西
 

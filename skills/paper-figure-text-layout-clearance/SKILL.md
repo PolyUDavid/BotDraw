@@ -1,34 +1,31 @@
 ---
 name: paper-figure-text-layout-clearance
 description: >-
-  Use when paper-figure text overlaps, overflows boxes, or crowds arrows/icons:
-  OCR bbox text–text overlap gate, whole-block text boxes, padding from edges,
-  line–text clearance, wrap before shrink, z-order rules.
+  Use when paper-figure text overlaps, graphics overlap (叠图), overflows boxes,
+  or crowds arrows/icons: OCR text–text gate, shape/graphic clearance,
+  whole-block boxes, padding, wrap before shrink, z-order.
 ---
-# Paper figure text layout clearance (no overlap)
+# Paper figure text + graphic layout clearance
 
-Companion to [paper-figure-type-calibration](sand-workflow:paper-figure-type-calibration), [paper-figure-hierarchical-measure](sand-workflow:paper-figure-hierarchical-measure), [paper-figure-fig01-gold-bar](sand-workflow:paper-figure-fig01-gold-bar).
+Companion to [paper-figure-type-calibration](sand-workflow:paper-figure-type-calibration), [paper-figure-layout-distribution](sand-workflow:paper-figure-layout-distribution), [paper-figure-hierarchical-measure](sand-workflow:paper-figure-hierarchical-measure).
 
 ## Principle
-Measured slots first, then type that fits. Never drop large type into a tight frame and hope shrinkText saves it.
+Measured slots first, then type that fits. Never drop large type into a tight frame and hope shrinkText saves it. **叠字 and 叠图 are both hard FAIL.**
 
-## Hard gate (Kevin t48u) — OCR text–text before PASS
-Office `check-overlap` alone is **not enough** (false negatives on ink that still collides in preview).
-
-Before freeze / PASS / Drive:
+## Hard gates before PASS (t48u + t49u)
 
 ```bash
 FIG_ROOT=<figroot> python tools/ocr_font_overlap_gate.py A FigXX
+FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 ```
 
-Require `qa/<fig>_ocr_font_overlap.json`:
-- `overlap_pass: true`
-- `n_overlap == 0` (RapidOCR ink bboxes on A preview; IoU ≥ 0.08 or positive IoU with centers closer than 0.25× smaller height = collide)
-- Each residual pair listed with `a`/`b` strings + boxes — Corrector must clear **every** pair
+Require:
+- OCR `overlap_pass` — text–text ink IoU cleared
+- `shape_overlap_pass` — cards/icons/badges/pics not colliding (IoU≥0.05 siblings)
+- `text_shape_clear_pass` — text not riding non-parent graphics
+- `text_in_box_pass` ([layout-gates-2](sand-workflow:paper-figure-layout-gates-2))
 
-Also keep structure `text_in_box_pass` ([paper-figure-layout-gates-2](sand-workflow:paper-figure-layout-gates-2)).
-
-Stub empty `pairs: []` without a real OCR run = **FAIL**.
+Office `check-overlap` alone is **not enough**.
 
 ## Whole-block text (Kevin)
 1. One text box per content block (multi-line wrap OK).
@@ -38,29 +35,22 @@ Stub empty `pairs: []` without a real OCR run = **FAIL**.
 
 ## Clearance rules (before freeze)
 1. **Box padding**: ink ≥2–4 px (or ≥0.04×box_h) inside border.
-2. **text–text**: gap ≥0.3× smaller font px (or merge blocks); OCR gate must show 0 collisions.
-3. **text–line / arrow**: clearance ≥1.5× shaft; shafts never cross glyphs.
-4. **text–icon / badge**: reserved wells; no riding stroke.
-5. **Crowded dual labels** (e.g. mech name vs Confidence%): **separate slots**, do not stack in one band.
-6. **Key/Results**: clamp each string to its cell; ban cross-cell float.
-7. **Z-order**: fill → chrome → icons → arrows → text/OMML on top.
+2. **text–text**: gap ≥0.3× smaller font px; OCR gate 0 collisions.
+3. **shape–shape (叠图)**: non-contained siblings IoU &lt; 0.05; place from ORIG slots.
+4. **text–line / arrow**: clearance ≥1.5× shaft; shafts never cross glyphs.
+5. **text–icon / badge**: reserved wells; no riding stroke.
+6. **Crowded dual labels**: separate slots.
+7. **Key/Results**: clamp to cells; ban cross-cell float.
+8. **Z-order**: fill → chrome → icons → arrows → text/OMML — geometry still non-colliding.
 
 ## If it still overlaps
 1. Widen/tall frame from ORIG measure.
 2. Wrap 2 lines / tighten tracking.
 3. Shorten only if ORIG does.
-4. Last: tiny local px cut (−4–8%) on that block — **shrink-only**, never short-string `_LOCAL_MULT` boost.
-5. Re-run `ocr_font_overlap_gate.py` until `overlap_pass`.
-
-## Gates
-- `text_in_box_pass`; OCR `overlap_pass`; text–text findings = 0 for reader-visible collisions.
-- Crop every crowded corner; &lt;3s visible collide → FAIL.
-- Write residuals into `qa/<fig>_indistinguishable.json` + `qa/<fig>_ocr_font_overlap.json`.
+4. Role-group shrink (−4–8%) together — never one-off `_LOCAL_MULT`.
+5. Re-run both gate scripts until pass.
 
 ## Anti-patterns
-- shrinkText / fit=False overflow
-- Absolute Y from OCR without block merge
-- Raising type after arrows through the text band
-- Bak OCR ghost layers
-- Mech/conf or Key hero sharing one overloaded slot
-- Claiming PASS on office overlap=1.00 while OCR ink boxes still collide
+- Claiming PASS on OCR while cards/icons still overlap
+- Hiding 叠图 with z-order / opacity
+- Uneven chip sizes inside one role to dodge collision
