@@ -3,8 +3,9 @@ name: botdraw
 description: >-
   PRIMARY entry for BotDraw paper-figure redraw: 1:1 editable A-PPT (optional
   Blender B). Load first from PolyUDavid/BotDraw — quality-merge, gold_bars,
-  OMML, arrows, scene UI, OCR+layout, media-slot harmony (t58u self-check + full
-  crops/AI fill), and t68u Cycles rebuild of low-quality B media slots.
+  OMML, arrows, scene UI, OCR+layout, media-slot harmony; t68u crude-B ban
+  (rebuild Cycles for hardware). Step 0 is paper-figure-onboard-selftest
+  (t69u): qa/onboard_selftest.json must pass before any user figure.
   Use when user says botdraw / 论文插图 / redraw figures.
 ---
 # botdraw — BotDraw 入口（主入口）
@@ -14,6 +15,9 @@ description: >-
 这是 **BotDraw 技能包的唯一推荐入口**。本地 Cursor / 下一台 Bot：先加载本技能，再画图。
 （历史别名：`internaldraw` / `internaldraw-2`，新对话请用 **botdraw**。）
 
+## 新 bot 首次（t69u）
+先跑 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)：`python3 tools/onboard_selftest.py`。`qa/onboard_selftest.json` 的 `pass:true` 之前，不要接受用户 FIG_ROOT。禁止无 artifact 宣称 ready。t68u 粗糙 B 禁令在自测之后仍然有效。
+
 ## 跨 bot 可复现（Kevin t54u）
 - 不可靠：纯散文「精致/ORIG级」
 - 可靠：gold_bar 裁切+checklist；OCR/几何数字门禁；禁止无 artifact 宣称 PASS
@@ -21,6 +25,7 @@ description: >-
 详见 [paper-figure-gold-bar-calibration](sand-workflow:paper-figure-gold-bar-calibration)、[paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
 
 ## 加载顺序（强制）
+0. **paper-figure-onboard-selftest（t69u）** — 新 bot 首次：跑 onboard selftest，PASS 后再画
 1. **本技能 botdraw**
 2. paper-figure-quality-merge
 3. paper-figure-gold-bar-calibration
@@ -35,7 +40,7 @@ description: >-
 12. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
 13. paper-figure-indistinguishable-gate
 14. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
-15. 需要 B 时：paper-figure-b-blender（t68u：低质槽改 Cycles 重建，SAMPLES≥96）
+15. 需要 B 时：paper-figure-b-blender（**含 t68u：禁粗糙灰块/糊截图当 B**）
 
 ## 非协商硬标准
 - 1:1 量测；禁整页截图/potrace 当可编辑交付
@@ -43,7 +48,8 @@ description: >-
 - gold_bars 分层 UI
 - 同 role 字号一致；**零叠字、零叠图**（门禁 PASS 仍须目视；漏检不算过）
 - **媒体槽完整**：禁截图裁半；优先完整 ORIG 裁切，不和谐时允许 AI 局部补图插入（见 media-slot-harmony）
-- **t68u B 媒体槽**：低质截图/裁切或过简灰块必须改 Blender Cycles 按 ORIG 构图重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例 Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）：必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。见 paper-figure-b-blender
+- **B 硬件/车辆槽（t68u）**：糊截图或过简灰块 Cycles = FAIL；须按 ORIG 构图用 Confirmation Cycles 重建（例：Fig08 HIL/FiSens/PV）
+- **先自测（t69u）**：没有 `qa/onboard_selftest.json`，或其中 `pass` 不为 true，禁止开始用户图
 - 密图分区；**边画边 SBS/自检**
 
 ## PASS 前必跑
@@ -54,4 +60,4 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 另需：`qa/<fig>_media_slots.json`（每槽 complete）、scene_ui、indistinguishable；缺 = FAIL。
 
 ## 每图交付
-out_A pptx、prev、双门禁、media_slots、omml/arrow/scene/layout、indistinguishable、ORIG|A SBS、icon/media SBS。
+out_A pptx、prev、双门禁、media_slots、omml/arrow/scene/layout、indistinguishable、ORIG|A SBS、icon/media SBS；有 B 时另交 out_B + Cycles renders/.blend。

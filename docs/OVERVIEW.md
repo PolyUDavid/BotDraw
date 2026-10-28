@@ -6,6 +6,7 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
 
 ## 加载顺序
 
+0. `paper-figure-onboard-selftest`（t69u）。新 bot 首次：`python3 tools/onboard_selftest.py`，`qa/onboard_selftest.json` 的 `pass:true` 之后才接受用户图。禁止无 artifact 宣称 ready。
 1. `botdraw`（主入口，先加载）。`internaldraw` 与 `internaldraw-2` 是历史别名，加载后按 botdraw 全套执行。
 2. `paper-figure-quality-merge`（总闸，入口会拉它）。
 3. 总闸锁定的栈，每张图都要：

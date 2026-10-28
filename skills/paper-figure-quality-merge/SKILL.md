@@ -3,9 +3,9 @@ name: paper-figure-quality-merge
 description: >-
   Use when redrawing paper/SI figures as editable A-PPT and B+Blender with
   Confirmation-gold QA, full OMML, gold_bar UI, OCR+layout gates, media-slot
-  harmony (t58u: no cut-off crops, optional AI fill), t68u Cycles rebuild of
-  low-quality B slots, and indistinguishable hard gate. Load before drawing
-  or claiming PASS.
+  harmony (t58u), indistinguishable gate, and t68u crude-B ban. New bots run
+  paper-figure-onboard-selftest (t69u) and need qa/onboard_selftest.json pass
+  before any user figure. Load before drawing or claiming PASS.
 ---
 # Paper figure quality merge
 
@@ -23,10 +23,10 @@ description: >-
 6. layout-gates（含 axis_arrows_outward）
 7. type-calibration + text-layout-clearance
 8. layout-distribution
-Also: dense-region, hierarchical-measure, layout-gates-2, feedback-to-skill, b-blender.
+Also: dense-region, hierarchical-measure, layout-gates-2, feedback-to-skill, **b-blender（t68u 禁粗糙 B）**.
 
-## t68u B（硬）
-B 媒体槽若只能是低质截图/裁切或过简灰块 Cycles，必须用 Blender Cycles 按 ORIG 构图重建（硬件、线缆、屏幕）。Confirmation：`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。范例：Fig08 (a) 硬件三联（HIL pack / FiSens / PV-wind-home）必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。见 [paper-figure-b-blender](sand-workflow:paper-figure-b-blender)。
+## t69u 先自测
+新 bot 首次画用户图之前跑 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)。`qa/onboard_selftest.json` 必须 `pass:true`。无 artifact 不得宣称 ready。t68u 粗糙 B 禁令在自测之后仍然有效。
 
 ## Contract
 One PPTX/fig; slide=ORIG.
@@ -38,10 +38,11 @@ python tools/layout_type_shape_gate.py A FigXX
 + **目视**清叠字/裁半（门禁假阴性仍 FAIL）
 + `qa/<fig>_media_slots.json` 每槽 `complete:true`
 + scene_ui / indistinguishable artifacts
++ **有 B 时**：硬件/车辆槽须 Confirmation Cycles，禁糊截图与过简灰块（Kevin t68u；见 [paper-figure-b-blender](sand-workflow:paper-figure-b-blender)）
 
 ## Hard bans
-Whole-slide paste as sole deliverable; potrace; fake math; coarse UI; bare arrows; **截图裁半**；OCR PASS 但肉眼叠字；散文精致无 artifact。
-**允许**：局部 media slot 用 AI 生图插入以和谐（禁整页 AI）。
+Whole-slide paste as sole deliverable; potrace; fake math; coarse UI; bare arrows; **截图裁半**；OCR PASS 但肉眼叠字；散文精致无 artifact；**B 槽用糊截图/玩具灰块充数**。
+**允许**：局部 media slot 用 AI 生图插入以和谐（禁整页 AI）；B 硬件用 Blender 按 ORIG 构图重建。
 
 ## Loop
 Designer → Drawer → Reviewer → Corrector；**一区一检**（叠字+媒体完整+SBS crop）。
