@@ -25,6 +25,9 @@ env/
 *.pptx
 *.ppt
 
+# OCR gate cache written when FIG_ROOT is the repo
+.ocr_cache/
+
 # Secrets and private local trees
 .env
 .env.*

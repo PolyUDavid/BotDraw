@@ -19,6 +19,14 @@ cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 python3 tools/audit_omml_arrows.py /path/to/Fig01.pptx
 ```
 
+`ocr_font_overlap_gate.py` 是宣称 PASS / 冻结前的 OCR 字号 + 叠字硬门禁（Kevin t48u）。需要 Python 3、`Pillow`、`rapidocr_onnxruntime`。`FIG_ROOT` 指向操作者自己的图目录：
+
+```bash
+FIG_ROOT=<figroot> python tools/ocr_font_overlap_gate.py A FigXX
+```
+
+通过条件与 JSON 字段见 [docs/OCR_FONT_OVERLAP_GATE.md](docs/OCR_FONT_OVERLAP_GATE.md)。仅 office check-overlap 不够。
+
 ## 要拷贝的技能文件夹（22）
 
 - `a-ppt`

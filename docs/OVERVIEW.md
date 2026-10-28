@@ -1,6 +1,6 @@
 # BotDraw 技能关系
 
-BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹成可编辑纯矢量 A-PPTX，需要三维载具时再加 Blender B。仓库只放技能和两个审计脚本。
+BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹成可编辑纯矢量 A-PPTX，需要三维载具时再加 Blender B。仓库只放技能和三个审计脚本。
 
 ## 加载顺序
 
@@ -14,7 +14,7 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
    - `paper-figure-layout-gates` — 刻度、Abl 引导线、Fig08 阶梯线
 4. 测量与版式：`paper-figure-hierarchical-measure`、`paper-figure-type-calibration`、`paper-figure-text-layout-clearance`、`paper-figure-layout-gates-2`。
 5. 密图走 `paper-figure-dense-region-pipeline`：逐区画、SBS、冻结，再下一区。
-6. 交卷前 `paper-figure-indistinguishable-gate`。失败裁剪交给 `paper-figure-feedback-to-skill`。
+6. 交卷前 `paper-figure-indistinguishable-gate`，且 `qa/<fig>_ocr_font_overlap.json` 里 `font_pass` 与 `overlap_pass` 都为真。失败裁剪交给 `paper-figure-feedback-to-skill`。
 7. 绘制合同：`paper-figure-a-ppt` / `a-ppt`，叠齐用 `scientific-figure-faithful-replica` 与 `vector-ui-overlay-stack`。全套流程说明在 `ppt-blender`。
 8. A 通过后才做 `paper-figure-b-blender`。没有载具时 B 等于 A，在 QA 里注明。
 
@@ -24,5 +24,6 @@ BotDraw 是给 Grok Bot / Cursor Agent 用的论文插图技能包：1:1 临摹�
 
 - `tools/fig_gate_audit.py` — 扫一张 PPTX 的 OMML / Fallback（下划线假公式、`₍paren₎`、拆开 AlternateContent 的空白风险），并写出 scene / arrow / indistinguishable 候选 JSON。
 - `tools/audit_omml_arrows.py` — 统计 `m:oMath`、箭头端点与命名 shaft，以及 OMML 之外的纯文本公式残留。
+- `tools/ocr_font_overlap_gate.py` — Kevin t48u：对 ORIG 的 OCR 字高（`font_pass` / `h_med`）和 A 预览墨迹框叠字（`overlap_pass`）。宣称 PASS 前必跑。用法见 [OCR_FONT_OVERLAP_GATE.md](OCR_FONT_OVERLAP_GATE.md)。
 
 脚本默认指向操作者本机的图目录。仓库不包含那些图，也不包含 Drive ID。
