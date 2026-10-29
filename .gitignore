@@ -28,6 +28,9 @@ env/
 # OCR gate cache written when FIG_ROOT is the repo
 .ocr_cache/
 
+# Generated gate reports and onboard proof (do not commit)
+qa/
+
 # Secrets and private local trees
 .env
 .env.*

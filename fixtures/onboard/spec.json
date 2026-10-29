@@ -1,0 +1,42 @@
+{
+  "fig": "OnboardDemo",
+  "canvas": [960, 560],
+  "gold_inset": "gold_bars/brain_layered/orig.png",
+  "gold_bar_checklist": "gold_bars/brain_layered/checklist.md",
+  "panel": [8, 8, 944, 544],
+  "slot": [560, 72, 352, 416],
+  "texts": [
+    {
+      "id": "title",
+      "role": "title",
+      "text": "Onboard Title",
+      "xy": [48, 44],
+      "font_px": 48,
+      "box": [48, 36, 460, 72]
+    },
+    {
+      "id": "body_a",
+      "role": "body",
+      "text": "Body Alpha Label",
+      "xy": [48, 156],
+      "font_px": 28,
+      "box": [48, 148, 460, 44]
+    },
+    {
+      "id": "body_b",
+      "role": "body",
+      "text": "Body Beta Label",
+      "xy": [48, 220],
+      "font_px": 28,
+      "box": [48, 212, 460, 44]
+    },
+    {
+      "id": "caption",
+      "role": "caption",
+      "text": "Caption Note Here",
+      "xy": [48, 300],
+      "font_px": 20,
+      "box": [48, 292, 460, 36]
+    }
+  ]
+}

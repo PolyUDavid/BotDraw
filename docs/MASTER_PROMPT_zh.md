@@ -28,10 +28,12 @@ git clone https://github.com/PolyUDavid/BotDraw.git
 
 ```
 按 @botdraw（仓库 https://github.com/PolyUDavid/BotDraw）全套重绘本图为可编辑 A-PPTX。
+新 bot 首次：先完成「新 bot：自检预调试」（@paper-figure-onboard-selftest）。qa/onboard_selftest.json 的 ready:true 之后才画。禁止无 artifact 宣称 ready。
 必须满足：1:1 量测落笔、真 OMML、箭头小尾巴、轴箭头朝外、对照 gold_bars/ 分层 UI、同 role 字号一致、零叠字、零叠图、媒体槽完整（禁截图裁半）、OCR+layout_type_shape 双门禁 PASS，icon SBS vs gold_bar，分区 SBS。
+需要 B 时遵守 t68u：糊截图或过简灰块 Cycles = FAIL，须按 ORIG 用 Confirmation Cycles 重建（film_transparent、Freestyle #34363A、双 SUN、SAMPLES≥96）。范例 Fig08 (a) HIL/FiSens/PV。
 禁止散文「精致」单独过关；缺 qa artifact 不许 PASS。
 FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
-先读 @botdraw、@paper-figure-quality-merge、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony 再动手。
+先读 @botdraw、@paper-figure-onboard-selftest、@paper-figure-quality-merge、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony 再动手。
 ```
 
 ---
@@ -49,6 +51,7 @@ FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
 散文「精致 / ORIG 级」不能单独 PASS。对照仓库 gold_bars/<archetype>/ 裁切 + checklist。缺 qa artifact 不许 PASS。
 
 【加载顺序（强制）】
+0. paper-figure-onboard-selftest（t69u：新 bot / 换机首次；qa/onboard_selftest.json 的 ready:true 可跳过）
 1. botdraw
 2. paper-figure-quality-merge
 3. paper-figure-gold-bar-calibration（t53u/t54u 可视金标）
@@ -63,7 +66,7 @@ FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
 12. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
 13. paper-figure-indistinguishable-gate
 14. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
-15. 需要 B：paper-figure-b-blender
+15. 需要 B：paper-figure-b-blender（t68u：低质槽改 Cycles 重建，SAMPLES≥96）
 
 【硬标准 — 任一不满足禁止声称 PASS / 完成 / 交付】
 1. 忠实 1:1：按 ORIG 量测落笔；禁止整页截图贴图、禁止 potrace/抠图当矢量。
@@ -78,6 +81,8 @@ FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
 10. 图表：轴 tick、带在线下、虚线、markers、Abl 引导线、Fig08 阶梯线等按 layout-gates。
 11. 密图分区冻结；边画边发 ORIG|A SBS，并边画边自检叠字与裁半。
 12. 媒体槽（t58u）：禁止截图裁半；优先完整 ORIG 裁切；不和谐或不完整时允许 AI 局部补图插入图片槽（禁整页 AI；标签/公式仍矢量+OMML）。qa/<fig>_media_slots.json 每槽 complete:true。
+13. B 媒体槽（t68u）：糊截图或过简灰块 Cycles = FAIL。须按 ORIG 构图用 Confirmation Cycles 重建（硬件、线缆、屏幕；film_transparent、Freestyle #34363A、双 SUN、SAMPLES≥96）。范例 Fig08 (a) HIL/FiSens/PV。自测通过后仍然有效。
+14. 新 bot：自检预调试（t69u）。先跑下面两道门禁，qa/onboard_selftest.json 必须 ready:true。无 artifact 禁止开始用户图。
 
 【PASS 前必跑】
 FIG_ROOT=<图项目根> python tools/ocr_font_overlap_gate.py A <FigID>
@@ -101,7 +106,7 @@ qa/<FigID>_indistinguishable.json、qa/<FigID>_*_sbs.png、icon SBS vs gold_bar
 - 只要 A / 还要 B：<A 或 A+B>
 - 特殊说明：<可选>
 
-现在先加载 @botdraw、@paper-figure-quality-merge、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony，确认技能在场，再量测→对照 gold_bar 分层绘制→边画边自检→双门禁→SBS 汇报。
+现在先确认 qa/onboard_selftest.json 已是 ready:true（新 bot 否则先做「新 bot：自检预调试」），再加载 @botdraw、@paper-figure-quality-merge、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony，然后量测→对照 gold_bar 分层绘制→边画边自检→双门禁→SBS 汇报。
 ```
 
 ## 完整版要点
@@ -113,9 +118,29 @@ qa/<FigID>_indistinguishable.json、qa/<FigID>_*_sbs.png、icon SBS vs gold_bar
 - 轴：`axis_arrows_outward_pass`；优先 poly tip；禁 flip 导致朝里。
 - PPT type ruler 只管字号几何，不当精致唯一门禁。
 - 媒体槽（t58u）：`@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`。
+- B 媒体槽（t68u）：加载顺序第 15 步 `paper-figure-b-blender`。糊截图或灰块 = FAIL，改 Confirmation Cycles（SAMPLES≥96）。范例 Fig08 (a) HIL/FiSens/PV。
+- 新 bot：自检预调试（t69u）：加载顺序第 0 步 `paper-figure-onboard-selftest`。`qa/onboard_selftest.json` 的 `ready:true` 后再画。
 
 ## Kevin t58u 补丁（叠字 + 截图裁半 + AI 补槽）
 - **边画边自检**：每区查叠字/骑边；OCR 过关仍须目视。
 - **媒体完整**：禁止截图裁半；优先完整 ORIG 裁切。
 - **AI 局部补图**：槽不和谐或不完整时，允许 GenerateImage 生成后插入图片槽；禁整页 AI；标签/公式仍矢量+OMML。
 - 交付必有 `qa/<fig>_media_slots.json`；技能 [paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
+
+## Kevin t68u B 补丁（低质槽改 Cycles 重建）
+- **何时重建：** B 媒体槽若将是低质截图/裁切，或过简灰块 Cycles，必须用 Blender Cycles 按 ORIG 构图重建（硬件、线缆、屏幕）。
+- **Confirmation 栈：** `film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`。
+- **范例：** Fig08 panel (a) 硬件三联（HIL pack / FiSens / PV-wind-home）必须 Cycles inset，禁灰块与模糊 ORIG 粘贴。
+- **加载：** `@botdraw` 第 15 步 [paper-figure-b-blender](sand-workflow:paper-figure-b-blender)；总闸 [paper-figure-quality-merge](sand-workflow:paper-figure-quality-merge) 同步锁定。入口仍是 `@botdraw`，不是 internaldraw。
+
+## 新 bot：自检预调试
+
+克隆/安装之后、任何用户 `FIG_ROOT` 之前，加载顺序第 0 步跑 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)。`qa/onboard_selftest.json` 里 `ready:true` 之前禁止开画。禁止用散文代替 artifact。
+
+```bash
+python3 tools/onboard_selftest.py
+FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
+FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
+```
+
+证明文件：`qa/onboard_selftest.json`（`ready`、`ocr`、`layout`、`sbs`）。夹具 `fixtures/onboard/README.md` 指向 `gold_bars/brain_layered`，并说明如何产出 OnboardDemo。FAIL 则按字号/净空自调再证。t68u 粗糙 B 禁令在自测之后仍然有效。

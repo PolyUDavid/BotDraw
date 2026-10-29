@@ -1,0 +1,11 @@
+{
+  "font_pass": true,
+  "overlap_pass": true,
+  "n_overlap": 0,
+  "h_med_band": [0.92, 1.22],
+  "type_uniform_pass": true,
+  "shape_overlap_pass": true,
+  "text_shape_clear_pass": true,
+  "media_slot_complete": true,
+  "gold_bar_ref": "gold_bars/brain_layered"
+}

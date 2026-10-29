@@ -2,9 +2,8 @@
 name: botdraw
 description: >-
   PRIMARY entry for BotDraw paper-figure redraw: 1:1 editable A-PPT (optional
-  Blender B). Load first from PolyUDavid/BotDraw — quality-merge, gold_bars,
-  OMML, arrows, scene UI, OCR+layout, media-slot harmony (t58u self-check + full
-  crops/AI fill). Use when user says botdraw / 论文插图 / redraw figures.
+  Blender B). New bots must run paper-figure-onboard-selftest (t69u) until proof
+  PASS before user figures; includes t68u crude-B ban.
 ---
 # botdraw — BotDraw 入口（主入口）
 
@@ -13,6 +12,11 @@ description: >-
 这是 **BotDraw 技能包的唯一推荐入口**。本地 Cursor / 下一台 Bot：先加载本技能，再画图。
 （历史别名：`internaldraw` / `internaldraw-2`，新对话请用 **botdraw**。）
 
+## 新 bot 强制预调试（Kevin t69u）
+下载/安装本仓库后，**先**加载并跑完 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest)：
+环境探测 → 固定夹具试画 → OCR+layout 数字证明 → FAIL 则自调再证 → `qa/onboard_selftest.json` 里 `ready:true` **之后**，才允许开用户 FIG_ROOT。
+禁止用「环境应该没问题」跳过；效果达不到当前金标就继续调，不要急着画用户图。
+
 ## 跨 bot 可复现（Kevin t54u）
 - 不可靠：纯散文「精致/ORIG级」
 - 可靠：gold_bar 裁切+checklist；OCR/几何数字门禁；禁止无 artifact 宣称 PASS
@@ -20,6 +24,7 @@ description: >-
 详见 [paper-figure-gold-bar-calibration](sand-workflow:paper-figure-gold-bar-calibration)、[paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
 
 ## 加载顺序（强制）
+0. **paper-figure-onboard-selftest**（新 bot / 换机首次；`ready:true` 可跳过）
 1. **本技能 botdraw**
 2. paper-figure-quality-merge
 3. paper-figure-gold-bar-calibration
@@ -34,7 +39,7 @@ description: >-
 12. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
 13. paper-figure-indistinguishable-gate
 14. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
-15. 需要 B 时：paper-figure-b-blender
+15. 需要 B 时：paper-figure-b-blender（**含 t68u：禁粗糙灰块/糊截图当 B**）
 
 ## 非协商硬标准
 - 1:1 量测；禁整页截图/potrace 当可编辑交付
@@ -42,6 +47,7 @@ description: >-
 - gold_bars 分层 UI
 - 同 role 字号一致；**零叠字、零叠图**（门禁 PASS 仍须目视；漏检不算过）
 - **媒体槽完整**：禁截图裁半；优先完整 ORIG 裁切，不和谐时允许 AI 局部补图插入（见 media-slot-harmony）
+- **B 硬件/车辆槽（t68u）**：糊截图或过简灰块 Cycles = FAIL；须按 ORIG 构图用 Confirmation Cycles 重建（例：Fig08 HIL/FiSens/PV）
 - 密图分区；**边画边 SBS/自检**
 
 ## PASS 前必跑
@@ -52,4 +58,4 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 另需：`qa/<fig>_media_slots.json`（每槽 complete）、scene_ui、indistinguishable；缺 = FAIL。
 
 ## 每图交付
-out_A pptx、prev、双门禁、media_slots、omml/arrow/scene/layout、indistinguishable、ORIG|A SBS、icon/media SBS。
+out_A pptx、prev、双门禁、media_slots、omml/arrow/scene/layout、indistinguishable、ORIG|A SBS、icon/media SBS；有 B 时另交 out_B + Cycles renders/.blend。
