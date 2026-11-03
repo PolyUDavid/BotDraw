@@ -14,6 +14,7 @@ Each archetype:
 | `gear_layered` | Fig03 gear mass |
 | `axis_arrows_outward` | Fig09 axis tips outward |
 | `type_title_body_caption` | type ladder (with PPT ruler) |
+| `asset_icons_row` | t126 Kevin ORIG asset cards (orig.png + checklist.md; pass_example not frozen) |
 
 See skill `paper-figure-gold-bar-calibration`.
 

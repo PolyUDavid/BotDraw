@@ -20,6 +20,7 @@ description: >-
 ## 跨 bot 可复现（Kevin t54u）
 - 不可靠：纯散文「精致/ORIG级」
 - 可靠：gold_bar 裁切+checklist；OCR/几何数字门禁；禁止无 artifact 宣称 PASS
+- 高级 UI 以图层临摹 skill + gold_bar icon SBS 为准。
 - 流程：量测 → 对照 gold_bar 分层画 → **边画边自检叠字/裁半** → 双门禁 → icon SBS vs gold → 整页 SBS
 详见 [paper-figure-gold-bar-calibration](sand-workflow:paper-figure-gold-bar-calibration)、[paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
 
@@ -33,6 +34,7 @@ description: >-
 6. paper-figure-full-omml
 7. paper-figure-arrow-proportion
 8. paper-figure-scene-ui
+8b. **paper-figure-illustrator-layer-trace**（t126：Illustrator MCP + scientific-illustrator 图层临摹/z-order/多 path 图标 → 纯矢量 A-PPT；先 reconstruction_spec）
 9. paper-figure-type-calibration + paper-figure-text-layout-clearance
 10. paper-figure-layout-distribution
 11. paper-figure-layout-gates + paper-figure-layout-gates-2
