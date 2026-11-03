@@ -34,6 +34,7 @@ description: >-
 - `gear_layered` — Fig03 齿轮
 - `axis_arrows_outward` — 轴端朝外（Fig09）
 - `type_title_body_caption` — 字号阶梯示意
+- `asset_icons_row` — t126 Kevin ORIG asset cards（车+电池 / PV+太阳 / 双风机 / 户储+电池；多 path 图标）
 
 新失败类型：Kevin 贴裁切 → [paper-figure-feedback-to-skill](sand-workflow:paper-figure-feedback-to-skill) → 必要时 **新增 archetype**。
 

@@ -17,7 +17,7 @@ description: >-
 1. fig01-gold-bar
 2. full-omml
 3. arrow-proportion
-4. scene-ui + gold-bar-calibration
+4. scene-ui + gold-bar-calibration + illustrator-layer-trace（t126）
 5. **media-slot-harmony（t58u）** — 边画边自检；完整 ORIG 裁切；必要时 AI 局部补槽
 6. layout-gates（含 axis_arrows_outward）
 7. type-calibration + text-layout-clearance

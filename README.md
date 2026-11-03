@@ -17,6 +17,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md) 与 [docs/T58U_MEDIA_SLOT.md](docs/T58U_MEDIA_SLOT.md)。
 - **t68u B：** 加载顺序第 15 步是 `paper-figure-b-blender`。糊截图或过简灰块 Cycles = FAIL；须按 ORIG 构图用 Confirmation Cycles 重建（`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) HIL / FiSens / PV。
 - **t69u：** 加载顺序第 0 步是 `paper-figure-onboard-selftest`。见下方「新 bot：自检预调试」。`qa/onboard_selftest.json` 的 `ready:true` 之后才画。t68u 在自测之后仍然有效。
+- **t126：** `@botdraw` 在 `paper-figure-scene-ui` 之后加载 `paper-figure-illustrator-layer-trace`（Illustrator 图层临摹 / z-order / 多 path 图标 → 纯矢量 A-PPT；金标 `gold_bars/asset_icons_row`）。
 
 安装步骤见 [INSTALL.md](INSTALL.md)。技能关系见 [docs/OVERVIEW.md](docs/OVERVIEW.md)。本地 Cursor 粘贴提示词见 [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)（对话里 `@botdraw`）。
 
@@ -36,6 +37,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `paper-figure-arrow-proportion` | 有向边必须是杆 + 可见小尾巴；禁裸三角与巨头。 |
 | `paper-figure-media-slot-harmony` | t58u：边画边自检叠字与裁半；媒体槽必须完整；优先完整 ORIG 裁切，必要时 AI 局部补槽。 |
 | `paper-figure-scene-ui` | 每图强制精致分层 UI。大脑强制层；icon SBS vs gold_bar；`scene_ui.json` 必含 gold_bar 字段；媒体槽完整（t58u）。 |
+| `paper-figure-illustrator-layer-trace` | t126：Illustrator 图层临摹（named layers、z-order back→front、多 path 图标）→ 纯矢量 A-PPT；先写 reconstruction_spec。金标 `gold_bars/asset_icons_row`。 |
 | `paper-figure-layout-gates` | 坐标刻度、Abl 引导线、图表层级、Fig08 机制阶梯线、`axis_arrows_outward_pass`。 |
 | `paper-figure-layout-gates-2` | 文字入框、左右不镜像、Key 网格 IoU。YAML `name` 与上一文件夹冲突，按路径加载。 |
 | `paper-figure-text-layout-clearance` | 整块文本框、边距，以及文字与线/箭头/图标的间隙；t48u OCR 叠字与 t49u 叠图硬门禁；t58u 边画边自检。 |
@@ -53,7 +55,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
 | `advsci-endnote-polish` | Advanced Science 文献核实、排版、润色与 EndNote（稿件技能，不是插图绘制）。 |
 
-共 28 个技能文件夹，每个里面一份 `SKILL.md`。
+共 29 个技能文件夹，每个里面一份 `SKILL.md`。
 
 ## t53u/t54u 金标（gold bar）
 
@@ -63,7 +65,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 - layout-gates：`axis_arrows_outward_pass`。
 - 跨 bot 最小包：`botdraw` + `tools/` + `gold_bars/` + [docs/MASTER_PROMPT_zh.md](docs/MASTER_PROMPT_zh.md)。
 
-`gold_bars/` 与 `skills/` 并列。每个 archetype 有 `orig.png`、`pass_example.png`、`checklist.md`。当前四类：`brain_layered`、`gear_layered`、`axis_arrows_outward`、`type_title_body_caption`。说明见 [docs/GOLD_BAR_CALIBRATION.md](docs/GOLD_BAR_CALIBRATION.md)。
+`gold_bars/` 与 `skills/` 并列。每个 archetype 有 `orig.png`、`checklist.md`，已冻结的还有 `pass_example.png`。当前：`brain_layered`、`gear_layered`、`axis_arrows_outward`、`type_title_body_caption`，以及 t126 `asset_icons_row`（`orig.png` + `checklist.md`）。说明见 [docs/GOLD_BAR_CALIBRATION.md](docs/GOLD_BAR_CALIBRATION.md)。
 
 ## 硬门禁（ConsensusRetNet 金线）
 

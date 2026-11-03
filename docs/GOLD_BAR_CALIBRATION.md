@@ -4,4 +4,4 @@
 
 Skill: `paper-figure-gold-bar-calibration`；仓库根 `gold_bars/`。
 
-Archetypes: brain_layered, gear_layered, axis_arrows_outward, type_title_body_caption.
+Archetypes: brain_layered, gear_layered, axis_arrows_outward, type_title_body_caption, asset_icons_row (t126; orig.png + checklist.md).

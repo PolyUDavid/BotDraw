@@ -21,6 +21,7 @@ FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
 
 - **t58u：** `@botdraw` 加载顺序包含 `paper-figure-media-slot-harmony`（边画边自检、禁截图裁半、可选局部 AI 补槽）。见 [docs/README_T58U.md](docs/README_T58U.md)。
 - **t68u B：** 需要 B 时加载顺序含 `paper-figure-b-blender`。糊截图或过简灰块 Cycles = FAIL；按 ORIG 用 Confirmation Cycles 重建（`film_transparent`、Freestyle `#34363A`、双 SUN、`SAMPLES≥96`）。范例：Fig08 (a) HIL / FiSens / PV。自测之后仍然有效。
+- **t126：** `@botdraw` 在 `paper-figure-scene-ui` 之后加载 `paper-figure-illustrator-layer-trace`（Illustrator 图层临摹 → 纯矢量 A-PPT；金标 `gold_bars/asset_icons_row`）。
 
 ## 新 bot：自检预调试
 
@@ -58,7 +59,7 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 通过条件：`qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真。字段见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。两道门禁都要过；只跑其中一道不算 PASS。
 
-## 要拷贝的技能文件夹（28）
+## 要拷贝的技能文件夹（29）
 
 - `a-ppt`
 - `advsci-endnote-polish`
@@ -76,6 +77,7 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 - `paper-figure-gold-bar-calibration`
 - `paper-figure-hierarchical-measure`
 - `paper-figure-indistinguishable-gate`
+- `paper-figure-illustrator-layer-trace`
 - `paper-figure-layout-distribution`
 - `paper-figure-layout-gates`
 - `paper-figure-layout-gates-2`
