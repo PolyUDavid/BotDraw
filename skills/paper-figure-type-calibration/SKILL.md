@@ -59,3 +59,10 @@ Zone bump ×1.08–1.12 from measured ORIG px; enlarge frames or wrap **before**
 
 ## Deliver
 `qa/<fig>_type_calib.json` + `qa/<fig>_ocr_font_overlap.json` + `qa/<fig>_layout_type_shape.json`.
+
+## Quality sync — PDF face is not fc-match
+Load [paper-figure-font-renderer-proof](sand-workflow:paper-figure-font-renderer-proof) before naming a font.
+Keep `requested_font`, `fc_match_prediction`, the installed file hash, and `renderer_pdf_font` in separate fields. A passing `fc-match` does not prove the exported PDF. Read `/BaseFont` from that PDF (`python3 tools/quality_sync.py font-evidence --pdf ...`). `pdffonts` is optional; without it, span attribution stays UNKNOWN. A page font list is still not one Greek glyph.
+Run a family-only trial with geometry, size, and weight frozen. Then change size, baseline, weight, and numeric sidebearing as separate variables. Do not assign a role-size gain to a font install.
+Rotated labels use height along the line normal. Unknown direction is not horizontal. Same-role lock still allows a real source role split (value vs interval vs condition). No one-token boost.
+Native PowerPoint not opened → `NOT_PERFORMED`. t48u thresholds stay as published.

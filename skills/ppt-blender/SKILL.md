@@ -6,7 +6,7 @@ description: >-
 ---
 # 论文插图 PPT 重绘流程（A 版矢量 + B 版 Blender）
 
-A 版细则与纯矢量临摹见 [a-ppt](sand-workflow:a-ppt)。保真一比一另遵 [scientific-figure-faithful-replica](sand-workflow:scientific-figure-faithful-replica) 与 [vector-ui-overlay-stack](sand-workflow:vector-ui-overlay-stack)。
+A 版细则与纯矢量临摹见 [a-ppt](sand-workflow:a-ppt)。保真一比一另遵 [scientific-figure-faithful-replica](sand-workflow:scientific-figure-faithful-replica) 与 [vector-ui-overlay-stack](sand-workflow:vector-ui-overlay-stack)。质量证据以 [botdraw](sand-workflow:botdraw) 的加载顺序为准（`paper-figure-source-symbol-audit`、`paper-figure-font-renderer-proof`、`paper-figure-spatial-ocr-pairing`、`paper-figure-semantic-overlap-exceptions`、`paper-figure-data-provenance`、`paper-figure-unified-delivery`）。不要另开入口。
 
 ## 输入
 - 论文正文和 SI 的 docx（提取原图、图注、数据、公式）

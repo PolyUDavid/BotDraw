@@ -9,3 +9,4 @@ description: >-
 
 **请改用 [botdraw](sand-workflow:botdraw)。** 本技能仅为历史兼容；加载后按 botdraw 全套（含 gold_bar-calibration）执行。
 别名同样拉起 [paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)（t58u）；直接加载 botdraw 即包含该技能。
+质量同步六技能（source-symbol-audit、font-renderer-proof、spatial-ocr-pairing、semantic-overlap-exceptions、data-provenance、unified-delivery）只出现在 botdraw 加载顺序里。本别名不复制第二套流程。

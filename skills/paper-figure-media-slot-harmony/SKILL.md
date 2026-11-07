@@ -28,6 +28,18 @@ OCR/layout gates can PASS while Kevin still sees **文字重叠**、**截图裁�
 - 禁止：整页 AI 冒充可编辑 A-PPT；禁止生图代替公式/坐标轴/可编辑标签。
 - 产物进 `assets/<fig>/`，`method=ai_fill` 记入 media_slots.json；插入后仍双门禁 + SBS。
 
+## Quality sync — identity, then contain
+Each slot records authorized use, relative source id, SHA-256, scene label, filename, an alias only when evidence supports it, frame range, unknown range, target bbox, relationship id, contain method, alpha bounds, srcRect, and z-order.
+A filename or author alias can show which supplied file was intended. It does not prove a place, an experiment run, or a vehicle blueprint. `exact_experiment_run` stays UNKNOWN without run evidence.
+A mismatch is fixed by swapping the actual file and re-rendering. A disclosure line that leaves the wrong pixels in place is not a fix.
+Fit is `uniform_contain`: no stretch, and wheels, mirrors, or parts do not touch the frame in a way that clips them. The slot box and the source ROI are separate. Dropping a fully transparent margin is not cropping the vehicle. Check srcRect for a hidden crop.
+Source foreground occlusion stays. It is not the same defect as a half-cropped vehicle. Hidden structure may be marked unverified; do not claim it was restored.
+Screenshots the user allowed belong only in that media slot. Labels, axes, formulas, and data shapes stay editable. AI fill may not invent a scientific fact or a place. A photo pasted into a hardware B slot is still not a passing B.
+
+```bash
+python3 tools/quality_sync.py review-media --slot qa/<fig>_slot.json
+```
+
 ## Hooks
 清叠：[paper-figure-text-layout-clearance](sand-workflow:paper-figure-text-layout-clearance)
 总闸：[paper-figure-quality-merge](sand-workflow:paper-figure-quality-merge) / [botdraw](sand-workflow:botdraw)

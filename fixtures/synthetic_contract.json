@@ -1,0 +1,34 @@
+{
+  "synthetic_only": true,
+  "not_manuscript_data": true,
+  "source_index": ["equation-alpha", "condition-beta", "caption-gamma"],
+  "reviewed": {"equation-alpha": "correct", "condition-beta": "unknown", "caption-gamma": "defect"},
+  "extra_math": [{"id": "outside-delta", "source_scope": "outside-card-condition"}],
+  "font_evidence_schema_example": {
+    "requested_face": "Example Serif",
+    "fc_match_prediction": "Example Candidate",
+    "actual_pdf_span_face": null,
+    "actual_pdf_span_style": null,
+    "legal_font_provenance": "REQUIRED",
+    "native_powerpoint_review": "NOT_PERFORMED",
+    "status": "UNKNOWN_NOT_A_RENDER_TEST"
+  },
+  "vehicle_evidence_schema_example": {
+    "class": "synthetic-long-roof-oblique",
+    "source_bbox": [0, 0, 96, 48],
+    "same_scale_sbs": "REQUIRED_NOT_GENERATED_HERE",
+    "source_brand_or_blueprint": "UNKNOWN",
+    "saved_blend_reopened": false,
+    "actual_renderer_parameters": null,
+    "style_status": "NOT_EVALUATED"
+  },
+  "media_identity_schema_example": {
+    "expected_scene": "ExampleSceneB",
+    "supplied_filename": "ExampleSceneA_frame.jpg",
+    "alias_evidence": null,
+    "identity_status": "MISMATCH_REPLACE_ACTUAL_MEDIA",
+    "exact_experiment_run": "UNKNOWN",
+    "fit": "uniform_contain",
+    "source_foreground_occlusion": "SEPARATE_FROM_CROP_COMPLETENESS"
+  }
+}

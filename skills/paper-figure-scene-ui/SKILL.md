@@ -17,3 +17,6 @@ description: >-
 
 ## PASS
 缺 gold_bar 字段或 media complete:false → FAIL。
+
+## Quality sync — layers are not a certificate
+Start icons at the source proportion. Do not draw a small thick placeholder and scale it up later. Windows, wheels, lamps, and bumpers are separate checks when the source shows them. `layer_count` and mesh or sample counts do not certify refinement. Pair with [paper-figure-b-blender](sand-workflow:paper-figure-b-blender) for vehicle geometry and with [paper-figure-illustrator-layer-trace](sand-workflow:paper-figure-illustrator-layer-trace) for vector layer order.

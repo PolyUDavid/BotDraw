@@ -13,6 +13,7 @@ Does not read a user FIG_ROOT. t68u crude-B ban still applies after this proof.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import shutil
@@ -95,6 +96,27 @@ def detect_env() -> dict:
     if not layout_tool:
         blockers.append("tools/layout_type_shape_gate.py missing")
 
+    quality_sync_ok = False
+    quality_sync_note = "python3 tools/quality_sync.py selftest"
+    proc = subprocess.run(
+        [sys.executable, str(REPO / "tools" / "quality_sync.py"), "selftest"],
+        cwd=str(REPO),
+        capture_output=True,
+        text=True,
+    )
+    quality_sync_ok = proc.returncode == 0
+    if not quality_sync_ok:
+        blockers.append("quality_sync selftest failed; synthetic primitive proof is required and is not a user-figure PASS")
+    wiring_errors: list[str] = []
+    spec = importlib.util.spec_from_file_location("skill_wiring", REPO / "tools" / "skill_wiring.py")
+    if spec is None or spec.loader is None:
+        blockers.append("tools/skill_wiring.py missing")
+    else:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        wiring_errors = module.wiring_errors(REPO)
+        blockers.extend(wiring_errors)
+
     gold = {}
     gold_root = REPO / "gold_bars"
     for name in GOLD_ARCHETYPES:
@@ -129,6 +151,10 @@ def detect_env() -> dict:
         "gold_bars": gold,
         "libreoffice": libre,
         "blender": blender,
+        "quality_sync_primitives_pass": quality_sync_ok,
+        "quality_sync_command": quality_sync_note,
+        "quality_sync_does_not_certify_user_figures": True,
+        "skill_wiring_errors": wiring_errors,
     }
     return {"env": env, "blockers": blockers, "warnings": warnings, "env_pass": not blockers}
 
@@ -365,6 +391,15 @@ def emit_fixture() -> None:
     print(f"wrote {ORIG_PATH} slot={placed['placed']}")
 
 
+def _same_class_stop(records: list[dict], *, limit: int = 3) -> bool:
+    spec = importlib.util.spec_from_file_location("quality_policy", REPO / "tools" / "quality_policy.py")
+    if spec is None or spec.loader is None:
+        return False
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return bool(module.same_class_stop(records, limit=limit))
+
+
 def tune(scratch: Path) -> dict:
     spec = load_spec()
     if not ORIG_PATH.exists():
@@ -386,6 +421,7 @@ def tune(scratch: Path) -> dict:
     gap_extra = 0
     tight = False
     rounds = []
+    class_rows: list[dict] = []
     last_ocr: dict = {}
     last_layout: dict = {}
     placed: dict = {}
@@ -431,6 +467,21 @@ def tune(scratch: Path) -> dict:
         if not row["text_shape_clear_pass"] or not row["shape_overlap_pass"]:
             tight = True
             gap_extra += 8
+        failed = [key for key in (
+            "font_pass",
+            "overlap_pass",
+            "type_uniform_pass",
+            "shape_overlap_pass",
+            "text_shape_clear_pass",
+            "media_slot_complete",
+        ) if not row[key]]
+        class_rows.append({
+            "defect_class": "onboard:" + ",".join(failed) if failed else "none",
+            "gate_version": "2026-10-28-t69u",
+        })
+        if _same_class_stop(class_rows, limit=3):
+            row["stop"] = "STOP_SAME_CLASS"
+            break
     return {
         "rounds": rounds,
         "ocr": last_ocr,
@@ -483,6 +534,16 @@ def main() -> None:
         "warnings": detected["warnings"],
         "blockers": detected["blockers"],
         "t68u_crude_b_ban": T68U_NOTE,
+        "quality_sync_primitives_pass": detected["env"].get("quality_sync_primitives_pass"),
+        "quality_sync_does_not_certify_user_figures": True,
+        "status_axes": [
+            "measurement",
+            "source_review",
+            "visual_review",
+            "owner_acceptance",
+            "native_application_review",
+            "delivery_integrity",
+        ],
     }
     if detected["env_pass"]:
         scratch = Path(tempfile.mkdtemp(prefix="botdraw-onboard-"))

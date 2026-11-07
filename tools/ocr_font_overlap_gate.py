@@ -11,15 +11,22 @@ from __future__ import annotations
 import difflib, hashlib, json, os, statistics as st, sys
 from pathlib import Path
 
-from PIL import Image
-from rapidocr_onnxruntime import RapidOCR
-
 ROOT = Path(os.environ.get("FIG_ROOT", ".")).resolve()
 CACHE = ROOT / ".ocr_cache"
 CACHE.mkdir(exist_ok=True)
 QA = ROOT / "qa"
 QA.mkdir(exist_ok=True)
-eng = RapidOCR()
+eng = None
+
+
+def _engine():
+    """Import RapidOCR only when a real image is read. Historical thresholds stay put."""
+    global eng
+    if eng is None:
+        from rapidocr_onnxruntime import RapidOCR
+
+        eng = RapidOCR()
+    return eng
 
 # Normalized canvas width for comparable heights (same as qa_ocr2)
 NORM_W = 1672.0
@@ -39,13 +46,17 @@ def ocr(path: Path):
     cf = CACHE / f"{key}.json"
     if cf.exists():
         return json.loads(cf.read_text())
+    from PIL import Image
+
     im = Image.open(path).convert("RGB")
     s = NORM_W / im.size[0]
-    r, _ = eng(str(path))
+    r, _ = _engine()(str(path))
     out = []
+    spatial = _spatial()
     for b, t, c in r or []:
         xs = [p[0] * s for p in b]
         ys = [p[1] * s for p in b]
+        orientation = spatial.orientation_from_quad(b)
         out.append(
             {
                 "t": t,
@@ -58,6 +69,8 @@ def ocr(path: Path):
                 "y": (min(ys) + max(ys)) / 2,
                 "h": max(ys) - min(ys),
                 "w": max(xs) - min(xs),
+                "orientation": orientation,
+                "orientation_source": "polygon" if orientation in {"h", "v"} else "polygon_ambiguous",
             }
         )
     cf.write_text(json.dumps(out, ensure_ascii=False))
@@ -151,6 +164,16 @@ def pair_heights(orig, redraw):
     return hr, items, miss
 
 
+def _spatial():
+    import importlib.util
+
+    path = Path(__file__).resolve().parent / "spatial_ocr_pairing.py"
+    spec = importlib.util.spec_from_file_location("spatial_ocr_pairing", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def gate_one(tag: str, variant: str):
     op = ROOT / "orig" / f"{tag}.png"
     if not op.exists():
@@ -164,8 +187,10 @@ def gate_one(tag: str, variant: str):
             "pass": False,
             "error": f"missing orig={op.exists()} prev={pp.exists()}",
         }
-    o = filter_boxes(ocr(op))
-    p = filter_boxes(ocr(pp))
+    o_raw = ocr(op)
+    p_raw = ocr(pp)
+    o = filter_boxes(o_raw)
+    p = filter_boxes(p_raw)
     overlaps = find_overlaps(p)
     hr, items, miss = pair_heights(o, p)
     h_med = round(st.median(hr), 3) if hr else None
@@ -203,7 +228,15 @@ def gate_one(tag: str, variant: str):
             "h_med_band": [H_MED_LO, H_MED_HI],
             "outlier_band": [H_OUTLIER_LO, H_OUTLIER_HI],
         },
+        "spatial_pairing_report": f"{tag}_spatial_ocr_pairing.json",
+        "spatial_pairing_changes_historical_pass": False,
     }
+    spatial_name = QA / f"{tag}_spatial_ocr_pairing.json"
+    try:
+        spatial_rep = _spatial().emit_from_gate_boxes(o_raw, p_raw, norm_w=NORM_W)
+        spatial_name.write_text(json.dumps(spatial_rep, indent=2, ensure_ascii=False))
+    except Exception as exc:  # historical t48u result must still be written
+        rep["spatial_pairing_error"] = str(exc)
     outp = QA / f"{tag}_ocr_font_overlap.json"
     outp.write_text(json.dumps(rep, indent=2, ensure_ascii=False))
     return rep

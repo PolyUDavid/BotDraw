@@ -42,19 +42,38 @@ def local(tag):
     return tag.split("}")[-1] if "}" in tag else tag
 
 
+def _primitives():
+    import importlib.util
+
+    path = Path(__file__).resolve().parent / "quality_primitives.py"
+    spec = importlib.util.spec_from_file_location("quality_primitives", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def resolve_layout_pptx(root: Path, tag: str, variant: str) -> Path:
+    """One explicit out_A/out_B file. No other-variant fallback and no rglob backup."""
+    primitives = _primitives()
+    supplementary = os.environ.get("FIG_SUPPLEMENTARY", "").strip() in {"1", "true", "TRUE", "yes"}
+    try:
+        path = Path(primitives.resolve_variant(root, tag, variant, supplementary=supplementary))
+    except FileNotFoundError:
+        rel = f"out_{variant}/{'SI/' if supplementary else ''}{tag}.pptx"
+        raise FileNotFoundError(
+            f"explicit variant {variant} missing: {rel}; refused fallback to the other variant or any recursive backup"
+        ) from None
+    if path.is_symlink():
+        rel = f"out_{variant}/{'SI/' if supplementary else ''}{tag}.pptx"
+        raise ValueError(f"symlink pptx refused for variant {variant}: {rel}")
+    return path
+
+
 def find_pptx(tag: str, variant: str) -> Path | None:
-    cands = [
-        ROOT / "out_A" / f"{tag}.pptx",
-        ROOT / "out" / variant / f"{tag}.pptx",
-        ROOT / "A" / f"{tag}.pptx",
-        ROOT / "deliver" / f"{tag}.pptx",
-    ]
-    for p in cands:
-        if p.exists():
-            return p
-    # glob
-    hits = list(ROOT.rglob(f"{tag}.pptx"))
-    return hits[0] if hits else None
+    try:
+        return resolve_layout_pptx(ROOT, tag, variant)
+    except (ValueError, FileNotFoundError):
+        return None
 
 
 def emu_to_px(v, slide_w_emu, slide_w_px):
@@ -581,10 +600,32 @@ def text_shape_hits(shapes):
     return hits
 
 
+def _fail_report(tag: str, variant: str, error: str) -> dict:
+    rep = {
+        "fig": tag,
+        "variant": variant,
+        "gate": "layout_type_shape",
+        "version": "2026-10-28-t49u",
+        "resolver": "explicit-out-variant-v1",
+        "resolver_fallback_used": False,
+        "thresholds_changed": False,
+        "pass": False,
+        "error": error,
+        "thresholds": {
+            "type_ratio_max": TYPE_RATIO_MAX,
+            "shape_iou_fail": SHAPE_IOU_FAIL,
+            "text_shape_iou_fail": TEXT_SHAPE_IOU_FAIL,
+        },
+    }
+    (QA / f"{tag}_layout_type_shape.json").write_text(json.dumps(rep, indent=2, ensure_ascii=False))
+    return rep
+
+
 def gate_one(tag: str, variant: str):
-    pptx = find_pptx(tag, variant)
-    if not pptx:
-        return {"fig": tag, "pass": False, "error": "pptx not found"}
+    try:
+        pptx = resolve_layout_pptx(ROOT, tag, variant)
+    except (ValueError, FileNotFoundError) as exc:
+        return _fail_report(tag, variant, str(exc))
     # slide width from orig if present
     slide_w_px = 1672.0
     op = ROOT / "orig" / f"{tag}.png"
@@ -613,12 +654,21 @@ def gate_one(tag: str, variant: str):
     shape_pass = len(sh_hits) == 0
     text_shape_pass = len(ts_hits) == 0
     ok = type_pass and shape_pass and text_shape_pass
+    try:
+        pptx_rel = str(pptx.relative_to(ROOT))
+    except ValueError:
+        pptx_rel = pptx.name
     rep = {
         "fig": tag,
         "variant": variant,
         "gate": "layout_type_shape",
         "version": "2026-10-28-t49u",
+        "resolver": "explicit-out-variant-v1",
+        "resolver_fallback_used": False,
+        "thresholds_changed": False,
         "pptx": str(pptx),
+        "pptx_rel": pptx_rel,
+        "pptx_sha256": _primitives().sha256(pptx),
         "pass": ok,
         "type_uniform_pass": type_pass,
         "shape_overlap_pass": shape_pass,

@@ -35,3 +35,7 @@ One box per content block；禁一行一 shape；math = 真 OMML。
 
 ## If still overlaps
 Widen frame → wrap → role-group shrink → re-gate + 目视 SBS。
+
+## Quality sync — ink, not the padded box
+An OCR or padded AABB can intersect while the ink still has a visible gap. The reverse is also true: text can exist and still be cut, covered, or broken. Do not treat “the string was recognized” as clearance.
+For each hit, keep the same ROI crop of source and candidate, the box XML, and one class: missing/wrong glyph, real crop or occlusion, source semantic overlap, or pairing/recognition error. A recognition error keeps the original FAIL. Compare source line breaks with the candidate’s readable breaks. See [paper-figure-spatial-ocr-pairing](sand-workflow:paper-figure-spatial-ocr-pairing).
