@@ -94,5 +94,9 @@ PPT shrinkText. Key grid → rebuild cell geometry from coords table, then type 
 - Claiming PASS while any of the three gates is false/missing.
 - One long line that clips the pill instead of two centered lines.
 
+## Quality sync — one gate does not stand in for another
+Record source ROI, shape id, and the crop that shows a clipped edge. A/B input is explicit: `layout_type_shape_gate.py` reads `out_A` or `out_B` only and stores `pptx_sha256`. A missing B file fails closed. Preview bytes must match the PPTX that was just written; an older preview is not fresh.
+`text_in_box_pass`, `panel_side_match`, and `key_grid_iou` do not replace t48u, t49u, the symbol ledger, or the media identity record. YAML `name` stays `paper-figure-layout-gates`; load this folder by path `paper-figure-layout-gates-2`.
+
 ## Sources
-See `/workspace/kevin_figure_skills_pack/LAYOUT_SKILLS_SURVEY.md`.
+Layout rules in this folder stay generic. Do not import a private survey path or unpublished crops.

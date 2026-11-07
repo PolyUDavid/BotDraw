@@ -10,7 +10,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 
 ## 入口
 
-先加载 **`botdraw`**。新 bot 首次先做下面的「新 bot：自检预调试」（t69u），`qa/onboard_selftest.json` 的 `ready:true` 之后才画用户图。它会拉起 `paper-figure-quality-merge`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。需要 B 时再加载 `paper-figure-b-blender`（t68u：糊截图或过简灰块 Cycles = FAIL）。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。
+先加载 **`botdraw`**。新 bot 首次先做下面的「新 bot：自检预调试」（t69u），并先跑 `python3 tools/quality_sync.py selftest`（标准库；全绿只证明工具逻辑，不是用户图 PASS）。`qa/onboard_selftest.json` 的 `ready:true` 之后才画用户图。它会拉起 `paper-figure-quality-merge`、`paper-figure-data-provenance`、`paper-figure-gold-bar-calibration` 与 `paper-figure-media-slot-harmony`（t58u），再带上 Fig01 金线、全真 OMML、`paper-figure-source-symbol-audit`、箭头小尾巴、对照 `gold_bars/` 的精致分层 UI、`paper-figure-font-renderer-proof`、`paper-figure-spatial-ocr-pairing`、`paper-figure-semantic-overlap-exceptions`、轴箭头朝外、t48u OCR 字号与叠字硬门禁、t49u 同类型字号与叠图布局硬门禁，以及版式、测量、密图分区和不可区分门禁。需要 B 时再加载 `paper-figure-b-blender`（t68u：糊截图或过简灰块 Cycles = FAIL）。交付走 `paper-figure-unified-delivery`。不要跳过 quality-merge、gold-bar 校准或 media-slot-harmony 直接画图或宣称 PASS。用户接受当前外观不改写历史 FAIL。
 
 `internaldraw` 与 `internaldraw-2` 是历史别名，职责与 **botdraw** 相同；新对话请用 **botdraw**。二者同样应拉起 `paper-figure-media-slot-harmony`（或直接加载 botdraw，由其加载顺序带上该技能）。
 
@@ -29,7 +29,13 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `internaldraw` | 历史别名，指向 `botdraw`（含 gold-bar 与 media-slot-harmony）。新对话请用 botdraw。 |
 | `internaldraw-2` | 历史别名，指向 `botdraw`（与 `internaldraw` 同一套门禁，含 gold-bar 与 media-slot-harmony）。 |
 | `getting-started` | 新 bot 首次对话：问清语言、Drive、期刊与风格参考。用户图之前先过 onboard selftest。 |
-| `paper-figure-onboard-selftest` | t69u：自检预调试。对照 `fixtures/onboard/` 跑 OnboardDemo，`qa/onboard_selftest.json` 的 `ready:true` 之后才开用户图。 |
+| `paper-figure-onboard-selftest` | t69u：自检预调试。先跑标准库 `quality_sync.py selftest`，再对照 `fixtures/onboard/` 跑 OnboardDemo。`ready:true` 不代替逐源审查。 |
+| `paper-figure-data-provenance` | 逐系列标明 raw / printed / 像素几何 / synthetic / verified。禁止编造实验序列。冲突时主临摹与旁路分开。 |
+| `paper-figure-source-symbol-audit` | 源图逐符号审计。覆盖计数不是正确。Choice 与 Fallback 分开。`<` 与 `≤` 不自动等价。 |
+| `paper-figure-font-renderer-proof` | 本次 PDF 的 `/BaseFont` 与 span 证据。`fc-match` 只是预测。`pdffonts` 可选。 |
+| `paper-figure-spatial-ocr-pairing` | 位置、方向、一对一 OCR。不改 t48u 历史 PASS，也不把未配行算成完整。 |
+| `paper-figure-semantic-overlap-exceptions` | 源图科学叠放另账。原测量 FAIL 保留，不写成测得 PASS。 |
+| `paper-figure-unified-delivery` | 显式 `out_A`/`out_B`、原子写入、SHA/CRC。缺 B 不回退 A。远端没有 hash 字段则 UNKNOWN。 |
 | `paper-figure-quality-merge` | 总闸。锁定金线栈（含 gold_bars、t58u media-slot-harmony、t48u OCR 字号+叠字，以及 t49u 同类型字号+叠图）；画前或宣称 PASS 前必载。散文「精致」不可单独 PASS。 |
 | `paper-figure-gold-bar-calibration` | 跨 bot 精致度主标准：`gold_bars/` 裁切 + checklist。禁散文单独 PASS。 |
 | `paper-figure-fig01-gold-bar` | ConsensusRetNet Fig01 外观金线；Fig02–10 同一标准；UI 对照 gold_bars。 |
@@ -55,7 +61,7 @@ English: a standalone skill pack that traces paper figures 1:1 into editable pur
 | `vector-ui-overlay-stack` | OCR 叠齐 + 多层矢量 UI；Designer→Drawer→Reviewer→Corrector 逐区过闸。 |
 | `advsci-endnote-polish` | Advanced Science 文献核实、排版、润色与 EndNote（稿件技能，不是插图绘制）。 |
 
-共 29 个技能文件夹，每个里面一份 `SKILL.md`。
+共 35 个技能文件夹，每个里面一份 `SKILL.md`。质量同步的差异与仍未自动化的部分见 [docs/QUALITY_SYNC_GAP_MATRIX.md](docs/QUALITY_SYNC_GAP_MATRIX.md) 与 [docs/QUALITY_SYNC.md](docs/QUALITY_SYNC.md)。
 
 ## t53u/t54u 金标（gold bar）
 
@@ -99,7 +105,10 @@ FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
 
 - `tools/ocr_font_overlap_gate.py`（Kevin t48u）：对 ORIG 比字高（`font_pass` / `h_med`），并检查 A 预览墨迹框叠字（`overlap_pass`）。用法见 [docs/OCR_FONT_OVERLAP_GATE.md](docs/OCR_FONT_OVERLAP_GATE.md)。
 - `tools/layout_type_shape_gate.py`（Kevin t49u）：同一 `(panel, role)` 字号锁定（`type_uniform_pass`），卡片/图标兄弟形状不叠图（`shape_overlap_pass`），文字不骑非父级图形（`text_shape_clear_pass`）。用法见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。
-- `tools/onboard_selftest.py`（Kevin t69u）：新 bot 首次对照 `fixtures/onboard/` 产出 OnboardDemo，跑上面两道门禁，写出 `qa/onboard_selftest.json`（`ready:true`）。未 ready 不要画用户图。
+- `tools/onboard_selftest.py`（Kevin t69u）：新 bot 首次先跑质量同步标准库自检与技能接线，再对照 `fixtures/onboard/` 产出 OnboardDemo，跑上面两道门禁，写出 `qa/onboard_selftest.json`（`ready:true`）。未 ready 不要画用户图。同一失败类连续 3 轮不变则停止该类重试。
+- `tools/quality_sync.py`：`selftest`、`wiring`、`resolve-variant`、`audit-coverage`、`math-signature`、`pair-boxes`、`review-semantic`、`font-evidence`、`review-media`、`review-vehicle`、`review-series`、`status-policy`、`freeze`、`make-zip`、`verify-zip`。除 OCR 绘制夹具外，这些命令只用 Python 3 标准库。
+- `tools/spatial_ocr_pairing.py`：写空间配对报告。退出码 0 表示报告已写出，不是 t48u PASS。
+- `tools/export_skill_sync.py`：把相对 `main` 有改动的 `SKILL.md` 打成带 hash manifest 的 zip，供技能库同步。不把 zip 的自哈希写进包内。
 
 它们不携带论文数据。默认路径指向操作者自己的工作区，运行前改成你的目录，或把 PPTX 路径传给 `audit_omml_arrows.py`。不要把生成的 `*.pptx`、`qa/*.json` 或 `.ocr_cache/` 提交进本仓库。
 

@@ -60,6 +60,16 @@ Fix order: move to ORIG measured slots → enlarge gutters → shrink decorative
 `qa/<fig>_layout_type_shape.json` + updated `diag/<fig>_measure_coords.json` with `role` on every text block.
 Region freeze only when t48u OCR **and** t49u layout gates pass on that region/full slide.
 
+## Quality sync — semantic overlap is a second ledger
+Load [paper-figure-semantic-overlap-exceptions](sand-workflow:paper-figure-semantic-overlap-exceptions) when a source time window, trajectory, nest, or foreground label trips this gate.
+Do not move data, a window, or a marker to make IoU pass. Keep `measured_pass: false` on the original report. Write `REVIEWED_SEMANTIC_EXCEPTION` only with `finding_id`, source evidence, object ids, and `geometry_unchanged: true`.
+
+```bash
+python3 tools/quality_sync.py review-semantic --report qa/<fig>_overlap_raw.json --exceptions qa/<fig>_semantic_exceptions.json
+```
+
+No object-level evidence means no page-wide waiver. A new clip or a new collision is still a real fix. The counterexample is a second finding that stays in `unexcepted_finding_ids`.
+
 ## Anti-patterns
 - Per-string font tweaks that break role uniformity
 - Office overlap=OK while cards/icons still collide in preview

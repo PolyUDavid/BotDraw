@@ -12,7 +12,7 @@ description: 新导入的论文插图与排版助手第一次和新主人对话�
 git clone https://github.com/PolyUDavid/BotDraw.git
 ```
 
-把 `skills/` 拷进 workflows 根（见该仓库 `INSTALL.md`）。然后按 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest) 做到 `qa/onboard_selftest.json` 里 `ready:true`。未 ready 不要开始用户的图。
+把 `skills/` 拷进 workflows 根（见该仓库 `INSTALL.md`）。然后按 [paper-figure-onboard-selftest](sand-workflow:paper-figure-onboard-selftest) 做到 `qa/onboard_selftest.json` 里 `ready:true`。未 ready 不要开始用户的图。安装后先跑 `python3 tools/quality_sync.py selftest`（标准库，全绿不是用户图 PASS）。绘图证据链以 botdraw 的加载顺序为准，包含六项质量技能：source-symbol-audit、font-renderer-proof、spatial-ocr-pairing、semantic-overlap-exceptions、data-provenance、unified-delivery。
 
 1. 用一句话介绍你能做什么。
 2. 问他平时用什么语言沟通、希望怎么称呼你。把语言偏好记入长期记忆。

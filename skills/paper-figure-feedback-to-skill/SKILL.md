@@ -16,3 +16,7 @@ description: >-
 5. Redraw under [paper-figure-indistinguishable-gate](sand-workflow:paper-figure-indistinguishable-gate): **no PASS until SBS looks like ORIG** and gold_bar checklist fields exist.
 6. Clear every attached crop region before deliver.
 7. Mention skill pills in Chinese; push BotDraw so **下一台 bot** 装到同一套。
+
+## Quality sync — generic rule, synthetic counterexample
+Turn a real failure into a generic rule, then a synthetic positive and negative test, then a versioned retest on the same inputs. Do not copy a private image, a screenshot, an experimental number, an account, a machine path, or a font binary into `skills/` or `fixtures/`.
+Keep the historical FAIL file. The new test locks the tool behavior. It does not mark the user’s figure PASS. Stop on `STOP_SAME_CLASS` instead of stacking another patch for the same defect.

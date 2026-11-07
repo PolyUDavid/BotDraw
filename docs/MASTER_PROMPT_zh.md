@@ -33,7 +33,8 @@ git clone https://github.com/PolyUDavid/BotDraw.git
 需要 B 时遵守 t68u：糊截图或过简灰块 Cycles = FAIL，须按 ORIG 用 Confirmation Cycles 重建（film_transparent、Freestyle #34363A、双 SUN、SAMPLES≥96）。范例 Fig08 (a) HIL/FiSens/PV。
 禁止散文「精致」单独过关；缺 qa artifact 不许 PASS。
 FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
-先读 @botdraw、@paper-figure-onboard-selftest、@paper-figure-quality-merge、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony 再动手。
+先读 @botdraw、@paper-figure-onboard-selftest、@paper-figure-quality-merge、@paper-figure-data-provenance、@paper-figure-gold-bar-calibration、@paper-figure-media-slot-harmony、@paper-figure-source-symbol-audit、@paper-figure-font-renderer-proof、@paper-figure-spatial-ocr-pairing、@paper-figure-semantic-overlap-exceptions、@paper-figure-unified-delivery 再动手。
+用户接受当前外观时写入 owner_acceptance，不要改历史 measurement FAIL。python3 tools/quality_sync.py selftest 全绿不是用户图 PASS。
 ```
 
 ---
@@ -51,22 +52,30 @@ FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
 散文「精致 / ORIG 级」不能单独 PASS。对照仓库 gold_bars/<archetype>/ 裁切 + checklist。缺 qa artifact 不许 PASS。
 
 【加载顺序（强制）】
-0. paper-figure-onboard-selftest（t69u：新 bot / 换机首次；qa/onboard_selftest.json 的 ready:true 可跳过）
+<!-- botdraw-load-order -->
+0. paper-figure-onboard-selftest（t69u：新 bot / 换机首次；qa/onboard_selftest.json 的 ready:true 可跳过夹具，不可跳过技能）
 1. botdraw
 2. paper-figure-quality-merge
-3. paper-figure-gold-bar-calibration（t53u/t54u 可视金标）
-4. paper-figure-media-slot-harmony（t58u：完整裁切 / AI 补槽 / 边画边查）
-5. paper-figure-fig01-gold-bar
-6. paper-figure-full-omml
-7. paper-figure-arrow-proportion
-8. paper-figure-scene-ui
-9. paper-figure-type-calibration + paper-figure-text-layout-clearance
-10. paper-figure-layout-distribution
-11. paper-figure-layout-gates + paper-figure-layout-gates-2（按文件夹路径）
-12. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
-13. paper-figure-indistinguishable-gate
-14. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
-15. 需要 B：paper-figure-b-blender（t68u：低质槽改 Cycles 重建，SAMPLES≥96）
+3. paper-figure-data-provenance（禁止编造实验序列；冲突双版本）
+4. paper-figure-gold-bar-calibration（t53u/t54u 可视金标；用户接受 ≠ 严格源一致）
+5. paper-figure-media-slot-harmony（t58u：完整裁切 / AI 补槽 / 边画边查；文件 SHA 与 contain）
+6. paper-figure-fig01-gold-bar
+7. paper-figure-full-omml
+8. paper-figure-source-symbol-audit（覆盖 ≠ 正确；Choice 与 Fallback 分开）
+9. paper-figure-arrow-proportion
+10. paper-figure-scene-ui
+11. paper-figure-illustrator-layer-trace（t126）
+12. paper-figure-type-calibration + paper-figure-text-layout-clearance
+13. paper-figure-font-renderer-proof（fc-match 不是本次 PDF 证明）
+14. paper-figure-layout-distribution
+15. paper-figure-semantic-overlap-exceptions（原测量 FAIL 保留）
+16. paper-figure-spatial-ocr-pairing（不改 t48u 历史结论）
+17. paper-figure-layout-gates + paper-figure-layout-gates-2（按文件夹路径）
+18. paper-figure-hierarchical-measure + paper-figure-dense-region-pipeline
+19. paper-figure-indistinguishable-gate
+20. paper-figure-a-ppt / a-ppt / scientific-figure-faithful-replica / vector-ui-overlay-stack
+21. 需要 B：paper-figure-b-blender（t68u：低质槽改 Cycles 重建；几何优先；SAMPLES≥96 不是造型证明）
+22. paper-figure-unified-delivery（显式 out_A/out_B，SHA/CRC；缺 B 不回退 A）
 
 【硬标准 — 任一不满足禁止声称 PASS / 完成 / 交付】
 1. 忠实 1:1：按 ORIG 量测落笔；禁止整页截图贴图、禁止 potrace/抠图当矢量。
@@ -84,11 +93,17 @@ FIG_ROOT=<路径> 原图=<路径> 图号=<FigXX> 只要 A。
 13. B 媒体槽（t68u）：糊截图或过简灰块 Cycles = FAIL。须按 ORIG 构图用 Confirmation Cycles 重建（硬件、线缆、屏幕；film_transparent、Freestyle #34363A、双 SUN、SAMPLES≥96）。范例 Fig08 (a) HIL/FiSens/PV。自测通过后仍然有效。
 14. 新 bot：自检预调试（t69u）。先跑下面两道门禁，qa/onboard_selftest.json 必须 ready:true。无 artifact 禁止开始用户图。
 
+【状态轴】
+measurement、source_review、visual_review、owner_acceptance、native_application_review、delivery_integrity 分开。用户接受当前外观不改历史 FAIL。同一失败类同一版本默认 3 轮后 STOP_SAME_CLASS。合成 selftest 全绿不是用户图 PASS。原生 PowerPoint 未打开则 NOT_PERFORMED。
+
 【PASS 前必跑】
+python3 tools/quality_sync.py selftest
+python3 tools/quality_sync.py wiring
 FIG_ROOT=<图项目根> python tools/ocr_font_overlap_gate.py A <FigID>
 FIG_ROOT=<图项目根> python tools/layout_type_shape_gate.py A <FigID>
+selftest 与 wiring 和 layout 门禁用标准库。OCR 门禁需要可选依赖 Pillow 与 rapidocr_onnxruntime；未安装不得宣称 t48u PASS。
 要求：font_pass ∧ overlap_pass ∧ type_uniform_pass ∧ shape_overlap_pass ∧ text_shape_clear_pass。
-另：scene_ui gold_bar 字段齐全；有轴则 axis_arrows_outward_pass；qa/<fig>_media_slots.json 每槽 complete:true。
+另：scene_ui gold_bar 字段齐全；有轴则 axis_arrows_outward_pass；qa/<fig>_media_slots.json 每槽 complete:true 且含身份 SHA 与 uniform_contain。有数学时另有符号账本。有 B 时 variant 用 B，缺 out_B 即失败。
 
 【每图交付物】
 out_A/<FigID>.pptx、prev/A/<FigID>.png、

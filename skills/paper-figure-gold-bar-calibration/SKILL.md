@@ -55,6 +55,10 @@ description: >-
 ## 新 bot 最小包
 `botdraw` 入口 + `tools/*.py` + `gold_bars/` + `docs/MASTER_PROMPT_zh.md`（整仓 clone 亦可）。
 
+## Quality sync — acceptance is not the strict bar
+Owner acceptance of a current look is `owner_acceptance` with a scope. It is not `measurement` PASS and it is not “matches source in every slot”.
+Public fixtures in this repo stay the ones already shipped under `gold_bars/` plus new **synthetic** drawings. Do not add a crop from an unpublished manuscript, a user screenshot, or a private experiment, even after the user accepts the style. A new archetype needs a redistribution check first. Style rules travel as proportions, layer counts, and checklists.
+
 ## Hard bans
 - 散文标准单独 PASS
 - 无 gold_bar SBS 宣称大脑/齿轮精致

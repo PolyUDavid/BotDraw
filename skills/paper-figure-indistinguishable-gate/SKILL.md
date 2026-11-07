@@ -27,3 +27,8 @@ description: >-
 ## Self-check
 双门禁脚本 + 目视 SBS + media_slots + omml + arrows + scene_ui + layout_gates + indistinguishable.json。
 媒体规则见 [paper-figure-media-slot-harmony](sand-workflow:paper-figure-media-slot-harmony)。
+
+## Quality sync — four results, not one PASS
+Write these separately in `qa/<fig>_indistinguishable.json`: historical `measurement`, current `visual_review`, `owner_acceptance` with its scope, and `native_application_review`. Missing evidence is UNKNOWN, not PASS.
+A pairing error stays a pairing error. A semantic exception stays `REVIEWED_SEMANTIC_EXCEPTION`. Neither becomes `measured_pass: true`. Owner acceptance of the current look does not edit the historical FAIL. A later technical fix is a new file and does not backfill the old one.
+`python3 tools/quality_sync.py selftest` all green is L0 tool logic only.

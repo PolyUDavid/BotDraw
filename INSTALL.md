@@ -10,7 +10,14 @@ cd BotDraw
 mkdir -p "$BOT_WORKFLOWS_ROOT"
 cp -a skills/. "$BOT_WORKFLOWS_ROOT/"
 
+# 标准库质量同步自检。全绿不是用户图 PASS，也不需要 OCR / Office / Blender。
+python3 tools/quality_sync.py selftest
+python3 tools/quality_sync.py wiring
+python3 -m unittest discover -s tests -v
+
 # 新 bot：自检预调试。ready:true 之前不要画用户图。
+# onboard 绘制夹具需要可选依赖：Pillow、rapidocr_onnxruntime、一款 DejaVu 或 Liberation 字体。
+# LibreOffice、Blender、pdffonts 也是可选的；缺失时对应结论写 UNKNOWN，不要写成 PASS。
 python3 tools/onboard_selftest.py
 FIG_ROOT=<onboard_root> python tools/ocr_font_overlap_gate.py A OnboardDemo
 FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
@@ -59,7 +66,21 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 
 通过条件：`qa/<fig>_layout_type_shape.json` 里 `type_uniform_pass`、`shape_overlap_pass`、`text_shape_clear_pass` 都为真。字段见 [docs/LAYOUT_TYPE_SHAPE_GATE.md](docs/LAYOUT_TYPE_SHAPE_GATE.md)。两道门禁都要过；只跑其中一道不算 PASS。
 
-## 要拷贝的技能文件夹（29）
+`layout_type_shape_gate.py` 只读取 `FIG_ROOT/out_A/<Fig>.pptx` 或 `FIG_ROOT/out_B/<Fig>.pptx`。`FIG_SUPPLEMENTARY=1` 时改为对应的 `SI/` 子目录。缺 B 不会改用 A，也不会递归搜到旧备份。阈值仍是 t49u 原值。
+
+空间配对（标准库）：
+
+```bash
+python3 tools/spatial_ocr_pairing.py --source qa/src_boxes.json --redraw qa/redraw_boxes.json --out qa/Fig_spatial_ocr_pairing.json
+```
+
+字体证据读的是 PDF 文件里的 `/BaseFont`。`pdffonts`（poppler-utils）可选；没安装时 span 归属保持 UNKNOWN，不能用 `fc-match` 填上。
+
+```bash
+python3 tools/quality_sync.py font-evidence --pdf path/to/exported.pdf
+```
+
+## 要拷贝的技能文件夹（35）
 
 - `a-ppt`
 - `advsci-endnote-polish`
@@ -70,8 +91,10 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 - `paper-figure-a-ppt`
 - `paper-figure-arrow-proportion`
 - `paper-figure-b-blender`
+- `paper-figure-data-provenance`
 - `paper-figure-dense-region-pipeline`
 - `paper-figure-feedback-to-skill`
+- `paper-figure-font-renderer-proof`
 - `paper-figure-fig01-gold-bar`
 - `paper-figure-full-omml`
 - `paper-figure-gold-bar-calibration`
@@ -85,8 +108,12 @@ FIG_ROOT=<figroot> python tools/layout_type_shape_gate.py A FigXX
 - `paper-figure-onboard-selftest`
 - `paper-figure-quality-merge`
 - `paper-figure-scene-ui`
+- `paper-figure-semantic-overlap-exceptions`
+- `paper-figure-source-symbol-audit`
+- `paper-figure-spatial-ocr-pairing`
 - `paper-figure-text-layout-clearance`
 - `paper-figure-type-calibration`
+- `paper-figure-unified-delivery`
 - `ppt-blender`
 - `scientific-figure-faithful-replica`
 - `vector-ui-overlay-stack`

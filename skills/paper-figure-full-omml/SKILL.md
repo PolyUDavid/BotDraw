@@ -27,5 +27,17 @@ Load with [paper-figure-quality-merge](sand-workflow:paper-figure-quality-merge)
 3. Ban unwrap for delivery builds of math-heavy figs.
 4. Audit: `fallback_paren_sub_leaks`, `preview_looks_latex_pass`, plus t40u fields.
 
+## Quality sync — tree, not a coverage count
+Load [paper-figure-source-symbol-audit](sand-workflow:paper-figure-source-symbol-audit) whenever math is present.
+Caption lines, axis labels, isolated inequalities, and conditions outside the main box are math when they are math. Prose and filenames stay prose.
+Compare namespace, order, attributes, and text. An operator in `m:chr/@m:val` is part of the signature. Limits above and below the operator are part of it. A duplicated Choice term is not certified by a clean Fallback, and a complete Choice is not certified by a Fallback that drops the limits.
+`reviewed/N`, including a historical full count, is only coverage. Later errata do not increase that denominator. Unknown stays unknown.
+
+```bash
+python3 tools/quality_sync.py math-signature --xml qa/<fig>_choice_math.xml --compare qa/<fig>_other_math.xml
+```
+
+Equal signatures only say the selected roots match. They do not prove the source was read.
+
 ## Chart companion (Fig08 t42u)
 Predicted Mechanism **彩色阶梯粗线**（每 20s 一段，色=机制，高度对齐 ORIG）必须画；仅有图标+标签无粗线 = FAIL（见 layout-gates）。

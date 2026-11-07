@@ -30,3 +30,12 @@ FIG_ROOT=<onboard_root> python tools/layout_type_shape_gate.py A OnboardDemo
 - `sbs`: `qa/OnboardDemo_whole_sbs.png`
 
 `ready` 不为 true 时不要开用户 FIG_ROOT。t68u 粗糙 B 禁令在此之后仍然有效。
+
+绘制这条夹具需要可选的 Pillow、`rapidocr_onnxruntime` 和 DejaVu/Liberation 字体。在此之前，标准库命令必须能跑：
+
+```bash
+python3 tools/quality_sync.py selftest
+python3 -m unittest discover -s tests -v
+```
+
+这两条用合成 JSON，不使用本目录的 `orig.png`，也不能代替 OnboardDemo 或用户图。同一失败类连续 3 轮不变时，自检停止该类重试（`STOP_SAME_CLASS`）。
